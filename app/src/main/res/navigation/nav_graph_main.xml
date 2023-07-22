@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/nav_graph_main">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_main"
+    tools:ignore="InvalidNavigation">
 
+    <fragment
+        android:id="@+id/fragment_home"
+        android:name="hr.eduwalk.ui.fragment.HomeFragment"
+        tools:layout="@layout/fragment_home" />
 </navigation>
