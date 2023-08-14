@@ -19,6 +19,9 @@ import kotlinx.coroutines.launch
 class LoginFragment : BaseFragment(contentLayoutId = R.layout.fragment_login) {
 
     override val viewModel: LoginViewModel by viewModels()
+
+    override var onBackPressedListener = { mainActivity.finish() }
+
     private var binding: FragmentLoginBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -32,6 +35,7 @@ class LoginFragment : BaseFragment(contentLayoutId = R.layout.fragment_login) {
     }
 
     override fun setupListeners() {
+        super.setupListeners()
         binding?.apply {
             loginButton.setOnClickListener {
                 viewModel.onLoginClicked(username = usernameEditText.text.toString())

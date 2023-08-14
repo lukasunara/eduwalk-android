@@ -3,11 +3,13 @@ package hr.eduwalk.ui.fragment
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import hr.eduwalk.ui.activity.MainActivity
 import hr.eduwalk.ui.viewmodel.BaseViewModel
 import kotlinx.coroutines.launch
 
@@ -16,6 +18,10 @@ abstract class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentL
     protected abstract val viewModel: BaseViewModel<out Any, out Any>?
 
     protected val navController by lazy { findNavController() }
+    protected val mainActivity
+        get() = requireActivity() as MainActivity
+
+    protected open var onBackPressedListener = { mainActivity.onBackPressedDispatcher.onBackPressed() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,7 +33,12 @@ abstract class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentL
 
     protected abstract fun setupUi()
 
-    protected abstract fun setupListeners()
+    @CallSuper
+    protected open fun setupListeners() {
+        mainActivity.apply {
+            onBackPressedDispatcher.addCallback(owner = viewLifecycleOwner) { onBackPressedListener() }
+        }
+    }
 
     @CallSuper
     protected open fun setupObservers() {

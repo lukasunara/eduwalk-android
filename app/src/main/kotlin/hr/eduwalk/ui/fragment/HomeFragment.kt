@@ -23,6 +23,8 @@ class HomeFragment : BaseFragment(contentLayoutId = R.layout.fragment_home) {
 
     override val viewModel: HomeViewModel by viewModels()
 
+    override var onBackPressedListener = { mainActivity.finish() }
+
     private var binding: FragmentHomeBinding? = null
 
     private lateinit var user: User
@@ -43,6 +45,7 @@ class HomeFragment : BaseFragment(contentLayoutId = R.layout.fragment_home) {
     }
 
     override fun setupListeners() {
+        super.setupListeners()
         binding?.apply {
             logoutButton.setOnClickListener { viewModel.onLogoutClicked() }
         }
