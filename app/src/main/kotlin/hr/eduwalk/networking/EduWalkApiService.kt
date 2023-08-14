@@ -8,5 +8,5 @@ import retrofit2.http.POST
 interface EduWalkApiService {
 
     @POST("/users/create")
-    suspend fun login(@Body user: User): UserResponse
+    suspend fun loginUser(@Body user: User): UserResponse
 }

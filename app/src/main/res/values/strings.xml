@@ -2,7 +2,17 @@
     <string name="app_name">EduWalk</string>
 
     <!-- Login -->
-    <string name="login">Login</string>
+    <string name="login">Prijavi se</string>
     <string name="login_helper_text">Najviše 50 znakova</string>
     <string name="username">Username</string>
+
+    <!-- Home -->
+    <string name="create_new_routes">Stvori novu rutu</string>
+    <string name="logout">Odjavi se</string>
+    <string name="my_routes">Moje rute</string>
+    <string name="new_walk">Nova šetnja</string>
+    <string name="old_walks">Prijašnje šetnje</string>
+    <string name="welcome_teacher_title">Dobrodošli, %s</string>
+    <string name="welcome_student_title">Bok, %s :D</string>
+
 </resources>

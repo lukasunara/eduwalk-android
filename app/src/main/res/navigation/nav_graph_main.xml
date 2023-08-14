@@ -20,6 +20,13 @@
     <fragment
         android:id="@+id/fragment_home"
         android:name="hr.eduwalk.ui.fragment.HomeFragment"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/navigate_to_login_fragment"
+            app:destination="@id/fragment_login"
+            app:popUpTo="@layout/fragment_home"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 </navigation>

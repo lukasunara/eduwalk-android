@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import hr.eduwalk.data.sharedprefs.SharedPreferencesRepository
 import java.io.File
 import javax.inject.Singleton
 import kotlinx.serialization.json.Json
@@ -52,5 +53,11 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRepository(eduWalkApiService: EduWalkApiService) = EduWalkRepository(apiService = eduWalkApiService)
+    fun provideRepository(
+        eduWalkApiService: EduWalkApiService,
+        sharedPreferencesRepository: SharedPreferencesRepository,
+    ) = EduWalkRepository(
+        apiService = eduWalkApiService,
+        sharedPreferencesRepository = sharedPreferencesRepository,
+    )
 }
