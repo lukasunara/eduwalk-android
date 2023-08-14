@@ -17,11 +17,18 @@ abstract class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentL
 
     protected abstract val viewModel: BaseViewModel<out Any, out Any>?
 
+    protected open var onBackPressedListener = { mainActivity.onBackPressedDispatcher.onBackPressed() }
+
     protected val navController by lazy { findNavController() }
     protected val mainActivity
         get() = requireActivity() as MainActivity
 
-    protected open var onBackPressedListener = { mainActivity.onBackPressedDispatcher.onBackPressed() }
+    protected var isToolbarVisible: Boolean = false
+        get() = mainActivity.isToolbarVisible
+        set(value) {
+            mainActivity.isToolbarVisible = value
+            field = value
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
