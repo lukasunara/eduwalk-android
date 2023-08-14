@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
 
     <TextView
         android:id="@+id/welcome_home_title"
@@ -14,17 +15,17 @@
         android:paddingVertical="16dp"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/new_walk_button"
+        app:layout_constraintBottom_toTopOf="@id/start_new_walk_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Dobrodošao suki7 :D" />
 
     <Button
-        android:id="@+id/new_walk_button"
+        android:id="@+id/start_new_walk_button"
         android:layout_width="0dp"
         android:layout_height="@dimen/home_button_height"
-        android:text="@string/new_walk"
+        android:text="@string/start_new_walk"
         app:layout_constraintBottom_toTopOf="@id/create_new_walk_button"
         app:layout_constraintEnd_toStartOf="@id/old_walks_button"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -38,10 +39,10 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/home_button_height"
         android:text="@string/old_walks"
-        app:layout_constraintBottom_toBottomOf="@id/new_walk_button"
+        app:layout_constraintBottom_toBottomOf="@id/start_new_walk_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/new_walk_button"
-        app:layout_constraintTop_toTopOf="@id/new_walk_button"
+        app:layout_constraintStart_toEndOf="@id/start_new_walk_button"
+        app:layout_constraintTop_toTopOf="@id/start_new_walk_button"
         app:layout_constraintWidth_percent="0.4" />
 
     <Button
@@ -54,7 +55,7 @@
         app:layout_constraintEnd_toStartOf="@id/my_walks_button"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/new_walk_button"
+        app:layout_constraintTop_toBottomOf="@id/start_new_walk_button"
         app:layout_constraintWidth_percent="0.4" />
 
     <Button

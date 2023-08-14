@@ -10,9 +10,15 @@
     <string name="create_new_routes">Stvori novu rutu</string>
     <string name="logout">Odjavi se</string>
     <string name="my_routes">Moje rute</string>
-    <string name="new_walk">Nova šetnja</string>
+    <string name="start_new_walk">Započni novu šetnju</string>
     <string name="old_walks">Prijašnje šetnje</string>
     <string name="welcome_teacher_title">Dobrodošli, %s</string>
     <string name="welcome_student_title">Bok, %s :D</string>
 
+    <!-- Start New Walk -->
+    <string name="insert_walk_id_hint">Unesi šifru šetnje</string>
+    <string name="insert_walk_id_helper_text">Mora sadržavati 8 znakova</string>
+    <string name="start_walk">Započni šetnju</string>
+    <string name="or">ili</string>
+    <string name="choose_default_walk">Odaberi jednu od javno dostupnih šetnji</string>
 </resources>

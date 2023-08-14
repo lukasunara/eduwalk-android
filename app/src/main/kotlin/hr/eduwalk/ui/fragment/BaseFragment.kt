@@ -17,7 +17,7 @@ abstract class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentL
 
     protected abstract val viewModel: BaseViewModel<out Any, out Any>?
 
-    protected open var onBackPressedListener = { mainActivity.onBackPressedDispatcher.onBackPressed() }
+    protected open var onBackPressedListener: (() -> Unit)? = null
 
     protected val navController by lazy { findNavController() }
     protected val mainActivity
@@ -42,8 +42,8 @@ abstract class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentL
 
     @CallSuper
     protected open fun setupListeners() {
-        mainActivity.apply {
-            onBackPressedDispatcher.addCallback(owner = viewLifecycleOwner) { onBackPressedListener() }
+        onBackPressedListener?.let {
+            mainActivity.onBackPressedDispatcher.addCallback(owner = viewLifecycleOwner) { it() }
         }
     }
 

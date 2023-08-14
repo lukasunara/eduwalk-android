@@ -39,7 +39,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupToolbar() {
-        setSupportActionBar(binding.toolbar)
+        binding.toolbar.apply {
+            setSupportActionBar(this)
+            setNavigationOnClickListener { onBackPressed() }
+        }
+        supportActionBar?.title = null
     }
 
     private fun setupStartDestinationId() {

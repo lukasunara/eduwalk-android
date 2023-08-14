@@ -1,14 +1,12 @@
 package hr.eduwalk.networking.model
 
-import hr.eduwalk.data.model.User
-
 sealed class ApiResponse<out T : Any?> {
     data class Success<out T : Any?>(val data: T) : ApiResponse<T>()
     data class Error(val errorMessage: String) : ApiResponse<Nothing>()
 }
 
 fun UserResponse.toApiResponse() = when (error) {
-    null -> ApiResponse.Success<User?>(data = user)
+    null -> ApiResponse.Success(data = user)
     else -> ApiResponse.Error(errorMessage = error.toString())
 }
 
@@ -37,16 +35,16 @@ fun UserResponse.toApiResponse() = when (error) {
 //    is ServiceResult.Error -> WalkLocationsResponse(error = error)
 //}
 //
-//fun ServiceResult<Walk>.toWalkResponse() = when (this) {
-//    is ServiceResult.Success -> WalkResponse(walk = data)
-//    is ServiceResult.Error -> WalkResponse(error = error)
-//}
-//
-//fun ServiceResult<List<Walk>>.toWalksResponse() = when (this) {
-//    is ServiceResult.Success -> WalksResponse(walks = data)
-//    is ServiceResult.Error -> WalksResponse(error = error)
-//}
-//
+fun WalkResponse.toApiResponse() = when (error) {
+    null -> ApiResponse.Success(data = walk)
+    else -> ApiResponse.Error(errorMessage = error.toString())
+}
+
+fun WalksResponse.toApiResponse() = when (error) {
+    null -> ApiResponse.Success(data = walks)
+    else -> ApiResponse.Error(errorMessage = error.toString())
+}
+
 //fun ServiceResult<List<String>>.toWalkIdsResponse() = when (this) {
 //    is ServiceResult.Success -> WalkIdsResponse(walkIds = data)
 //    is ServiceResult.Error -> WalkIdsResponse(error = error)

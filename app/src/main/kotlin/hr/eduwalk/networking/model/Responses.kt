@@ -1,6 +1,7 @@
 package hr.eduwalk.networking.model
 
 import hr.eduwalk.data.model.User
+import hr.eduwalk.data.model.Walk
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -40,18 +41,18 @@ data class UserResponse(
 //    val error: ResponseError? = null,
 //)
 //
-//@Serializable
-//data class WalkResponse(
-//    val walk: Walk? = null,
-//    val error: ResponseError? = null,
-//)
-//
-//@Serializable
-//data class WalksResponse(
-//    val walks: List<Walk>? = null,
-//    val error: ResponseError? = null,
-//)
-//
+@Serializable
+data class WalkResponse(
+    @SerialName("walk") val walk: Walk? = null,
+    @SerialName("error") val error: ResponseError? = null,
+)
+
+@Serializable
+data class WalksResponse(
+    @SerialName("walks") val walks: List<Walk>? = null,
+    @SerialName("error") val error: ResponseError? = null,
+)
+
 //@Serializable
 //data class WalkIdsResponse(
 //    val walkIds: List<String>? = null,

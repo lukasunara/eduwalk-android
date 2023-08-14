@@ -20,7 +20,7 @@ class LoginFragment : BaseFragment(contentLayoutId = R.layout.fragment_login) {
 
     override val viewModel: LoginViewModel by viewModels()
 
-    override var onBackPressedListener = { mainActivity.finish() }
+    override var onBackPressedListener: (() -> Unit)? = { mainActivity.finish() }
 
     private var binding: FragmentLoginBinding? = null
 
@@ -34,13 +34,17 @@ class LoginFragment : BaseFragment(contentLayoutId = R.layout.fragment_login) {
         binding = null
     }
 
+    override fun onResume() {
+        super.onResume()
+        isToolbarVisible = false
+    }
+
     override fun setupListeners() {
         super.setupListeners()
         binding?.apply {
             loginButton.setOnClickListener {
                 viewModel.onLoginClicked(username = usernameEditText.text.toString())
             }
-
             usernameEditText.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                     // no-op

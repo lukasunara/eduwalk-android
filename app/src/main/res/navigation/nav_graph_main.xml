@@ -29,4 +29,11 @@
             app:destination="@id/fragment_start_new_walk" />
     </fragment>
 
+    <fragment
+        android:id="@+id/fragment_start_new_walk"
+        android:name="hr.eduwalk.ui.fragment.StartNewWalkFragment"
+        tools:layout="@layout/fragment_start_new_walk">
+
+    </fragment>
+
 </navigation>
