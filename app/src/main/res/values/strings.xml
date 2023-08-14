@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">EduWalk</string>
+
+    <!-- Login -->
+    <string name="login">Login</string>
+    <string name="login_helper_text">Najviše 50 znakova</string>
+    <string name="username">Username</string>
 </resources>
