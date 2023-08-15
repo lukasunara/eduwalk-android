@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import hr.eduwalk.R
 import hr.eduwalk.databinding.FragmentStartNewWalkBinding
-import hr.eduwalk.ui.WalksAdapter
+import hr.eduwalk.ui.adapter.WalksAdapter
 import hr.eduwalk.ui.event.StartNewWalkEvent
 import hr.eduwalk.ui.viewmodel.StartNewWalkViewModel
 import kotlinx.coroutines.launch
@@ -43,11 +43,6 @@ class StartNewWalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_st
         binding = null
     }
 
-    override fun onResume() {
-        super.onResume()
-        isToolbarVisible = true
-    }
-
     override fun setupUi() {
         binding?.defaultWalksRecyclerView?.adapter = walksAdapter
     }
@@ -55,6 +50,7 @@ class StartNewWalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_st
     override fun setupListeners() {
         super.setupListeners()
         binding?.apply {
+            toolbar.backButton.setOnClickListener { mainActivity.onBackPressed() }
             startWalkButton.setOnClickListener {
                 viewModel.onStartWalkClicked(walkId = walkIdEditText.text.toString())
             }

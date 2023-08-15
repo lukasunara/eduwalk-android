@@ -23,13 +23,6 @@ abstract class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentL
     protected val mainActivity
         get() = requireActivity() as MainActivity
 
-    protected var isToolbarVisible: Boolean = false
-        get() = mainActivity.isToolbarVisible
-        set(value) {
-            mainActivity.isToolbarVisible = value
-            field = value
-        }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

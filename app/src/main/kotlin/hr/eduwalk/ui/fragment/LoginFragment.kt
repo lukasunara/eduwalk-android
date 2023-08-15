@@ -34,11 +34,6 @@ class LoginFragment : BaseFragment(contentLayoutId = R.layout.fragment_login) {
         binding = null
     }
 
-    override fun onResume() {
-        super.onResume()
-        isToolbarVisible = false
-    }
-
     override fun setupListeners() {
         super.setupListeners()
         binding?.apply {

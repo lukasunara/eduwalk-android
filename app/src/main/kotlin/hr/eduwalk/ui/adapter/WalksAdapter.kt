@@ -1,4 +1,4 @@
-package hr.eduwalk.ui
+package hr.eduwalk.ui.adapter
 
 import android.os.Build
 import android.view.LayoutInflater
