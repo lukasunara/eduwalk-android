@@ -21,4 +21,7 @@
     <string name="start_walk">Započni šetnju</string>
     <string name="or">ili</string>
     <string name="choose_default_walk">Odaberi jednu od javno dostupnih šetnji</string>
+
+    <!-- Walk -->
+    <string name="walk_id">Šifra: %s</string>
 </resources>

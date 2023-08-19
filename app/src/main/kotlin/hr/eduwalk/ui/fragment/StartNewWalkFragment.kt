@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
@@ -76,8 +75,7 @@ class StartNewWalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_st
             viewModel.eventsFlow.collect { event ->
                 when (event) {
                     is StartNewWalkEvent.StartWalk -> {
-                        Toast.makeText(context, event.walk.title, Toast.LENGTH_LONG).show()
-                        // TODO("navigate to walk screen")
+                        navController.navigate(StartNewWalkFragmentDirections.navigateToWalkFragment(walk = event.walk))
                     }
                     is StartNewWalkEvent.ShowDefaultWalks -> walksAdapter.submitList(event.walks)
                     null -> {

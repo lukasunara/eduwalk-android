@@ -34,6 +34,20 @@
         android:name="hr.eduwalk.ui.fragment.StartNewWalkFragment"
         tools:layout="@layout/fragment_start_new_walk">
 
+        <action
+            android:id="@+id/navigate_to_walk_fragment"
+            app:destination="@id/fragment_walk"
+            app:popUpTo="@id/fragment_home" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_walk"
+        android:name="hr.eduwalk.ui.fragment.WalkFragment"
+        tools:layout="@layout/fragment_walk">
+
+        <argument
+            android:name="walk"
+            app:argType="hr.eduwalk.data.model.Walk" />
     </fragment>
 
 </navigation>
