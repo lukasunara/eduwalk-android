@@ -1,6 +1,7 @@
 package hr.eduwalk.networking
 
 import com.google.gson.Gson
+import hr.eduwalk.data.model.LocationWithScore
 import hr.eduwalk.data.model.User
 import hr.eduwalk.data.model.Walk
 import hr.eduwalk.data.sharedprefs.SharedPreferencesRepository
@@ -25,6 +26,8 @@ class EduWalkRepository @Inject constructor(
         apiService.loginUser(user = user)
     }.toApiResponse()
 
+    fun getUser() = sharedPreferencesRepository.getObject<User>(key = SharedPreferencesRepository.KEY_USER)
+
     fun logoutUser() = sharedPreferencesRepository.setObject<User>(key = SharedPreferencesRepository.KEY_USER, value = null)
 
     fun saveUserData(user: User) = sharedPreferencesRepository.setObject(key = SharedPreferencesRepository.KEY_USER, value = user)
@@ -37,4 +40,13 @@ class EduWalkRepository @Inject constructor(
     suspend fun getDefaultWalks(): ApiResponse<List<Walk>?> = handleErrorResponse {
         apiService.getDefaultWalks()
     }.toApiResponse()
+
+    /* --- Location --- */
+    suspend fun getLocationsWithScores(walkId: String): ApiResponse<List<LocationWithScore>?> = handleErrorResponse {
+        apiService.getLocationsWithScores(walkId = walkId, username = getUser()!!.username)
+    }.toApiResponse()
+
+    companion object {
+        const val NUMBER_OF_QUESTIONS_PER_QUIZ = 3
+    }
 }

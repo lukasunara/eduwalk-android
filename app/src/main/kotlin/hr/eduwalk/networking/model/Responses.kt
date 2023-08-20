@@ -1,5 +1,6 @@
 package hr.eduwalk.networking.model
 
+import hr.eduwalk.data.model.LocationWithScore
 import hr.eduwalk.data.model.User
 import hr.eduwalk.data.model.Walk
 import kotlinx.serialization.SerialName
@@ -23,6 +24,12 @@ data class UserResponse(
 //    val error: ResponseError? = null,
 //)
 //
+@Serializable
+data class LocationsWithScoresResponse(
+    @SerialName("locationsWithScores") val locationsWithScores: List<LocationWithScore>? = null,
+    @SerialName("error") val error: ResponseError? = null,
+)
+
 //@Serializable
 //data class WalkScoreResponse(
 //    val walkScore: WalkScore? = null,

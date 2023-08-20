@@ -2,6 +2,7 @@ package hr.eduwalk.ui.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hr.eduwalk.data.model.LocationWithScore
 import hr.eduwalk.networking.EduWalkRepository
 import hr.eduwalk.ui.event.WalkEvent
 import javax.inject.Inject
@@ -16,12 +17,26 @@ class WalkViewModel @Inject constructor(
     override val uiStateFlow = MutableStateFlow(value = Unit)
     override val eventsFlow = MutableStateFlow<WalkEvent?>(value = null)
 
-//    fun start() { }
+    private var locationsWithScores = listOf<LocationWithScore>()
 
-    fun onStartWalkClicked(walkId: String) {
+    fun start(walkId: String) {
+        getWalkLocationsWithScores(walkId = walkId)
+    }
+
+    private fun getWalkLocationsWithScores(walkId: String) {
         viewModelScope.launch {
-            val walk = handleErrorResponse(response = eduWalkRepository.getWalk(walkId = walkId)) ?: return@launch
-            eventsFlow.emit(value = WalkEvent.StartWalk(walk = walk))
+            locationsWithScores = handleErrorResponse(response = eduWalkRepository.getLocationsWithScores(walkId = walkId)) ?: return@launch
+            eventsFlow.emit(value = WalkEvent.ShowLocations(locationsWithScores = locationsWithScores))
+            updateWalkScore()
         }
+    }
+
+    private suspend fun updateWalkScore() {
+        eventsFlow.emit(
+            value = WalkEvent.UpdateScore(
+                total = locationsWithScores.sumOf { it.score ?: 0 },
+                max = EduWalkRepository.NUMBER_OF_QUESTIONS_PER_QUIZ * locationsWithScores.size,
+            )
+        )
     }
 }

@@ -3,6 +3,7 @@ plugins {
     id "org.jetbrains.kotlin.android"
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
     id 'kotlinx-serialization'
     id 'androidx.navigation.safeargs.kotlin'
     id 'kotlin-parcelize'
@@ -73,6 +74,10 @@ dependencies {
     def hilt_version = "2.47"
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
+
+    // Google Maps
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
 }
 
 kapt {

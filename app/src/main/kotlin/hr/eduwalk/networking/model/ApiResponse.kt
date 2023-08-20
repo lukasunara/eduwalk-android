@@ -20,6 +20,11 @@ fun UserResponse.toApiResponse() = when (error) {
 //    is ServiceResult.Error -> LocationScoreResponse(error = error)
 //}
 //
+fun LocationsWithScoresResponse.toApiResponse() = when (error) {
+    null -> ApiResponse.Success(data = locationsWithScores)
+    else -> ApiResponse.Error(errorMessage = error.toString())
+}
+
 //fun ServiceResult<WalkScore>.toWalkScoreResponse() = when (this) {
 //    is ServiceResult.Success -> WalkScoreResponse(walkScore = data)
 //    is ServiceResult.Error -> WalkScoreResponse(error = error)

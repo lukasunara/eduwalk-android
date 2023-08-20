@@ -24,4 +24,5 @@
 
     <!-- Walk -->
     <string name="walk_id">Šifra: %s</string>
+    <string name="walk_score">Rezultat: %d/%d</string>
 </resources>
