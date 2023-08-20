@@ -4,63 +4,76 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fillViewport="true">
+    android:scrollbars="none">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/walk_info_image"
+            android:id="@+id/rationale_image"
             android:layout_width="@dimen/dialog_illustration_width"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
-            android:src="@drawable/illustration_walking_outside"
-            app:layout_constraintBottom_toTopOf="@id/walk_title"
+            android:src="@drawable/illustration_location"
+            app:layout_constraintBottom_toTopOf="@id/rationale_title"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.55"
+            app:layout_constraintHeight_percent="0.45"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
 
         <TextView
-            android:id="@+id/walk_title"
+            android:id="@+id/rationale_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingHorizontal="12dp"
             android:paddingTop="20dp"
             android:paddingBottom="12dp"
+            android:text="@string/rationale_warning"
             android:textSize="22sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/walk_id"
+            app:layout_constraintBottom_toTopOf="@id/rationale_description"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="This Is A Title" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/walk_id"
+            android:id="@+id/rationale_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
             android:gravity="center"
             android:padding="4dp"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/walk_description"
+            android:text="@string/rationale_explanation"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@id/rationale_please_enable_permission"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Šifra: sifra123" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/walk_description"
+            android:id="@+id/rationale_please_enable_permission"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="@string/rationale_please_enable_permission"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@id/rationale_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/rationale_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
             android:padding="16dp"
-            android:textSize="16sp"
+            android:text="@string/rationale_okay"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="This is a walk description..." />
-
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </ScrollView>

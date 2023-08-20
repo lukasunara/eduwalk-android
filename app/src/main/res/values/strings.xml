@@ -25,4 +25,10 @@
     <!-- Walk -->
     <string name="walk_id">Šifra: %s</string>
     <string name="walk_score">Rezultat: %d/%d</string>
+
+    <!-- Rationale -->
+    <string name="rationale_explanation">Nećete moći prisustvovati šetnjama ukoliko ne omogućite korištenje Vaše lokacije!</string>
+    <string name="rationale_okay">U redu</string>
+    <string name="rationale_please_enable_permission">Molim Vas omogućite korištenje Vaše lokacije u postavkama aplikacije. Hvala :D</string>
+    <string name="rationale_warning">Upozorenje!</string>
 </resources>

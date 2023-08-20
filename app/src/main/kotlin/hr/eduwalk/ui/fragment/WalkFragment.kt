@@ -1,9 +1,17 @@
 package hr.eduwalk.ui.fragment
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -23,6 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import hr.eduwalk.R
 import hr.eduwalk.data.model.LocationWithScore
 import hr.eduwalk.databinding.FragmentWalkBinding
+import hr.eduwalk.ui.dialog.PermissionRationaleDialog
 import hr.eduwalk.ui.dialog.WalkInfoDialog
 import hr.eduwalk.ui.event.WalkEvent
 import hr.eduwalk.ui.viewmodel.WalkViewModel
@@ -41,7 +50,19 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
     private lateinit var mapView: MapView
     private lateinit var googleMap: GoogleMap
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    private val permissions = listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+
+    private val permissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        if (permissions.all { it.value }) {
+            onPermissionGranted()
+        } else {
+            onPermissionDenied()
+        }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentWalkBinding.inflate(inflater, container, false)
         this.binding = binding
 
@@ -55,6 +76,11 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.start(walkId = args.walk.id)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        checkPermissions()
     }
 
     override fun onResume() {
@@ -133,6 +159,11 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap.apply {
             setMinZoomPreference(MIN_ZOOM)
+            uiSettings.apply {
+                isZoomControlsEnabled = true
+                isCompassEnabled = true
+                isMapToolbarEnabled = false
+            }
         }
     }
 
@@ -173,6 +204,54 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
         3 -> BitmapDescriptorFactory.HUE_GREEN
         null -> BitmapDescriptorFactory.HUE_CYAN
         else -> BitmapDescriptorFactory.HUE_VIOLET
+    }
+
+    private fun checkPermissions() {
+        permissionRequest.launch(permissions.toTypedArray())
+    }
+
+    private fun onPermissionDenied() {
+        val (showEnablePermissionText, onRationaleButtonClickListener) =
+            if (this.permissions.all { shouldShowRequestPermissionRationale(it) }) {
+                Pair(false) { checkPermissions() }
+            } else {
+                Pair(true) { openAppSettings() }
+            }
+        PermissionRationaleDialog(
+            context = requireContext(),
+            showEnablePermissionText = showEnablePermissionText,
+            onRationaleButtonClicked = onRationaleButtonClickListener,
+        ).show()
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun onPermissionGranted() {
+        if (isLocationEnabled()) {
+            googleMap.isMyLocationEnabled = true
+        } else {
+            PermissionRationaleDialog(
+                context = requireContext(),
+                showEnablePermissionText = true,
+                onRationaleButtonClicked = { openLocationSettings() },
+            ).show()
+        }
+    }
+
+    private fun isLocationEnabled(): Boolean {
+        val locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    }
+
+    private fun openLocationSettings() {
+        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+        startActivity(intent)
+    }
+
+    private fun openAppSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = Uri.fromParts("package", requireActivity().packageName, null)
+        intent.data = uri
+        startActivity(intent)
     }
 
     private companion object {
