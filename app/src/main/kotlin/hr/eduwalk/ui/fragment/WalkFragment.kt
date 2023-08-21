@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -34,6 +35,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
@@ -58,7 +60,9 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
     private val args: WalkFragmentArgs by navArgs()
 
     private var binding: FragmentWalkBinding? = null
+    private var googleMap: GoogleMap? = null
     private var markers = mutableListOf<Marker>()
+    private var enabledLocationIds = mutableListOf<Int>()
 
     private lateinit var mapView: MapView
     private lateinit var googleMap: GoogleMap
@@ -190,22 +194,33 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
                 isCompassEnabled = true
                 isMapToolbarEnabled = false
             }
+            setOnMarkerClickListener(::onMarkerClick)
         }
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        // todo: show bottom sheet
+        val positionLatLng = LatLng(marker.position.latitude, marker.position.longitude)
+        googleMap?.apply {
+            animateCamera(CameraUpdateFactory.newLatLng(positionLatLng))
+        }
+
+        val locationWithScore = marker.tag as LocationWithScore
+
+        if (enabledLocationIds.contains(locationWithScore.location.id)) {
+            // TODO: show bottom sheet
+        }
         return true
     }
 
     private fun updateLocations(locationsWithScores: List<LocationWithScore>) {
+        val googleMap = googleMap ?: return
+
         locationsWithScores.forEach { locationWithScore ->
             val marker = googleMap.addMarker(
                 MarkerOptions()
                     .position(LatLng(locationWithScore.location.latitude, locationWithScore.location.longitude))
-                    .icon(BitmapDescriptorFactory.defaultMarker(chooseColor(locationWithScore.score)))
-                    .alpha(MARKER_DISABLED_ALPHA)
-            )?.apply { tag = locationWithScore.location }
+                    .icon(chooseMarkerIcon(locationWithScore.score))
+            )?.apply { tag = locationWithScore }
 
             marker?.let { markers.add(it) }
         }
@@ -223,13 +238,18 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
         googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0))
     }
 
-    private fun chooseColor(score: Int?): Float = when (score) {
-        0 -> BitmapDescriptorFactory.HUE_RED
-        1 -> BitmapDescriptorFactory.HUE_ORANGE
-        2 -> BitmapDescriptorFactory.HUE_YELLOW
-        3 -> BitmapDescriptorFactory.HUE_GREEN
-        null -> BitmapDescriptorFactory.HUE_CYAN
-        else -> BitmapDescriptorFactory.HUE_VIOLET
+    private fun chooseMarkerIcon(score: Int?): BitmapDescriptor {
+        val drawableResId = when (score) {
+            0 -> R.drawable.ic_marker_red
+            1 -> R.drawable.ic_marker_orange
+            2 -> R.drawable.ic_marker_yellow
+            3 -> R.drawable.ic_marker_green
+//            null -> R.drawable.ic_marker_default
+            else -> R.drawable.ic_marker_disabled
+        }
+        val bitmap = ContextCompat.getDrawable(requireContext(), drawableResId)?.toBitmap()
+
+        return bitmap?.let { BitmapDescriptorFactory.fromBitmap(bitmap) } ?: BitmapDescriptorFactory.defaultMarker()
     }
 
     private fun checkPermissions() {
@@ -258,7 +278,7 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
                 delay(CHECK_LOCATION_SETTINGS_DELAY)
                 getLastLocation()
                 if (areLocationRequestsEnabled) startLocationUpdates()
-                googleMap.isMyLocationEnabled = true
+                googleMap?.isMyLocationEnabled = true
             }
         } else {
             PermissionRationaleDialog(
@@ -320,25 +340,38 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
     private fun createLocationCallback() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
-//                Log.d("SUKI", "lastLocation: ${locationResult.lastLocation}")
-//                locationResult.lastLocation?.let { lastLocation ->
-//                    map?.apply {
-//                        animateCamera(
-//                            CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), ZOOM_LEVEL)
-//                        )
-//                    }
-//                    MARKERS_LAT_LNG_LIST.forEach { (title, latLng) ->
-//                        val markerLocation = Location(title).apply {
-//                            latitude = latLng.latitude
-//                            longitude = latLng.longitude
-//                        }
-//                        val distance = markerLocation.distanceTo(lastLocation)
-//                        Log.d("SUKI", "Distance from last location to $title is $distance m")
-//                    }
-//                }
+                enabledLocationIds.clear()
+                locationResult.lastLocation?.let { lastLocation ->
+                    googleMap?.apply {
+                        animateCamera(CameraUpdateFactory.newLatLng(LatLng(lastLocation.latitude, lastLocation.longitude)))
+                    }
+                    markers.forEach { marker ->
+                        val markerLocation = Location("").apply {
+                            latitude = marker.position.latitude
+                            longitude = marker.position.longitude
+                        }
+                        val distance = markerLocation.distanceTo(lastLocation)
+                        val locationWithScore = marker.tag as LocationWithScore
+
+                        val isInsideOfThreshold = distance <= locationWithScore.location.thresholdDistance
+                        if (isInsideOfThreshold) {
+                            enabledLocationIds.add(locationWithScore.location.id)
+                        }
+
+                        if (locationWithScore.score == null) {
+                            marker.setIcon(chooseDefaultMarkerIcon(isEnabled = isInsideOfThreshold))
+                        }
+                    }
+                }
             }
         }
+    }
+
+    private fun chooseDefaultMarkerIcon(isEnabled: Boolean): BitmapDescriptor {
+        val drawableResId = if (isEnabled) R.drawable.ic_marker_default else R.drawable.ic_marker_disabled
+        val bitmap = ContextCompat.getDrawable(requireContext(), drawableResId)?.toBitmap()
+
+        return bitmap?.let { BitmapDescriptorFactory.fromBitmap(bitmap) } ?: BitmapDescriptorFactory.defaultMarker()
     }
 
     @SuppressLint("MissingPermission")
@@ -353,7 +386,6 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
     private companion object {
         const val MIN_ZOOM = 15f
         const val BOUNDS_THRESHOLD = 0.0007
-        const val MARKER_DISABLED_ALPHA = 0.7f
         const val CHECK_LOCATION_SETTINGS_DELAY = 1000L
         const val LOCATION_UPDATE_INTERVAL_IN_MILLISECONDS = 10000L
 
