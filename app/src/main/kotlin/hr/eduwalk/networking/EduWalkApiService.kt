@@ -4,6 +4,7 @@ import hr.eduwalk.data.model.User
 import hr.eduwalk.networking.model.LocationsWithScoresResponse
 import hr.eduwalk.networking.model.UserResponse
 import hr.eduwalk.networking.model.WalkResponse
+import hr.eduwalk.networking.model.WalkScoreTop5Response
 import hr.eduwalk.networking.model.WalksResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -26,4 +27,8 @@ interface EduWalkApiService {
     /* --- Walk --- */
     @GET("join/getLocationsWithScores")
     suspend fun getLocationsWithScores(@Query("walkId") walkId: String, @Query("username") username: String): LocationsWithScoresResponse
+
+    /* --- WalkScore --- */
+    @GET("/walkScore/getTop5")
+    suspend fun getTop5WalkScores(@Query("walkId") walkId: String): WalkScoreTop5Response
 }

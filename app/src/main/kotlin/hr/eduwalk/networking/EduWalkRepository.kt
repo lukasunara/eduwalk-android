@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import hr.eduwalk.data.model.LocationWithScore
 import hr.eduwalk.data.model.User
 import hr.eduwalk.data.model.Walk
+import hr.eduwalk.data.model.WalkScore
 import hr.eduwalk.data.sharedprefs.SharedPreferencesRepository
 import hr.eduwalk.networking.model.ApiResponse
 import hr.eduwalk.networking.model.toApiResponse
@@ -44,6 +45,11 @@ class EduWalkRepository @Inject constructor(
     /* --- Location --- */
     suspend fun getLocationsWithScores(walkId: String): ApiResponse<List<LocationWithScore>?> = handleErrorResponse {
         apiService.getLocationsWithScores(walkId = walkId, username = getUser()!!.username)
+    }.toApiResponse()
+
+    /* --- WalkScore --- */
+    suspend fun getTop5WalkScores(walkId: String): ApiResponse<List<WalkScore>?> = handleErrorResponse {
+        apiService.getTop5WalkScores(walkId = walkId)
     }.toApiResponse()
 
     companion object {

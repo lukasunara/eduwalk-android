@@ -45,6 +45,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import hr.eduwalk.R
 import hr.eduwalk.data.model.LocationWithScore
 import hr.eduwalk.databinding.FragmentWalkBinding
+import hr.eduwalk.ui.dialog.LeaderboardDialog
 import hr.eduwalk.ui.dialog.PermissionRationaleDialog
 import hr.eduwalk.ui.dialog.WalkInfoDialog
 import hr.eduwalk.ui.event.WalkEvent
@@ -65,7 +66,6 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
     private var enabledLocationIds = mutableListOf<Int>()
 
     private lateinit var mapView: MapView
-    private lateinit var googleMap: GoogleMap
 
     private val locationRequest = LocationRequest.Builder(
         Priority.PRIORITY_HIGH_ACCURACY,
@@ -162,7 +162,7 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
                     WalkInfoDialog(context = requireContext(), walk = args.walk).show()
                 }
                 buttonOption2.setOnClickListener {
-                    // todo: show leaderboard dialog
+                    viewModel.onShowLeaderboardClicked()
                 }
             }
         }
@@ -173,14 +173,27 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
         lifecycleScope.launch {
             viewModel.eventsFlow.collect { event ->
                 when (event) {
-                    is WalkEvent.ShowLocations -> updateLocations(locationsWithScores = event.locationsWithScores)
-                    is WalkEvent.UpdateScore -> binding?.toolbar?.toolbarSubtitle?.apply {
-                        isVisible = true
-                        text = getString(R.string.walk_score, event.total, event.max)
+                    is WalkEvent.ShowLeaderboard -> {
+                        LeaderboardDialog(
+                            context = requireContext(),
+                            walkScores = event.walkScores,
+                            currentUserScore = event.currentUserScore,
+                            currentUserUsername = event.currentUserUsername,
+                        ).show()
                     }
                     null -> {
                         // no-op
                     }
+                }
+                viewModel.onEventConsumed()
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.uiStateFlow.collect { uiState ->
+                updateLocations(locationsWithScores = uiState.locationsWithScores)
+                binding?.toolbar?.toolbarSubtitle?.apply {
+                    isVisible = true
+                    text = getString(R.string.walk_score, uiState.userScoreTotal, uiState.maxScore)
                 }
             }
         }

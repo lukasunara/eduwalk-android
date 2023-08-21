@@ -82,6 +82,7 @@ class StartNewWalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_st
                         // no-op
                     }
                 }
+                viewModel.onEventConsumed()
             }
         }
     }

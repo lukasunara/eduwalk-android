@@ -66,6 +66,7 @@ class LoginFragment : BaseFragment(contentLayoutId = R.layout.fragment_login) {
                         // no-op
                     }
                 }
+                viewModel.onEventConsumed()
             }
         }
     }

@@ -25,16 +25,16 @@ fun LocationsWithScoresResponse.toApiResponse() = when (error) {
     else -> ApiResponse.Error(errorMessage = error.toString())
 }
 
-//fun ServiceResult<WalkScore>.toWalkScoreResponse() = when (this) {
-//    is ServiceResult.Success -> WalkScoreResponse(walkScore = data)
-//    is ServiceResult.Error -> WalkScoreResponse(error = error)
+//fun WalkScoreResponse.toApiResponse() = when (error) {
+//    null -> ApiResponse.Success(data = walkScore)
+//    else -> ApiResponse.Error(errorMessage = error.toString())
 //}
 //
-//fun ServiceResult<List<WalkScore>>.toWalkScoreTop5Response() = when (this) {
-//    is ServiceResult.Success -> WalkScoreTop5Response(walkScores = data)
-//    is ServiceResult.Error -> WalkScoreTop5Response(error = error)
-//}
-//
+fun WalkScoreTop5Response.toApiResponse() = when (error) {
+    null -> ApiResponse.Success(data = walkScores)
+    else -> ApiResponse.Error(errorMessage = error.toString())
+}
+
 //fun ServiceResult<List<Location>>.toWalkLocationsResponse() = when (this) {
 //    is ServiceResult.Success -> WalkLocationsResponse(locations = data)
 //    is ServiceResult.Error -> WalkLocationsResponse(error = error)

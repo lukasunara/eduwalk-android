@@ -31,4 +31,7 @@
     <string name="rationale_okay">U redu</string>
     <string name="rationale_please_enable_permission">Molim Vas omogućite korištenje Vaše lokacije u postavkama aplikacije. Hvala :D</string>
     <string name="rationale_warning">Upozorenje!</string>
+
+    <!-- Leaderboard -->
+    <string name="leaderboard_title">Najbolji igrači su…</string>
 </resources>

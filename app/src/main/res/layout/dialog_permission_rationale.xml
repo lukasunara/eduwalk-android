@@ -18,7 +18,7 @@
             android:src="@drawable/illustration_location"
             app:layout_constraintBottom_toTopOf="@id/rationale_title"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.45"
+            app:layout_constraintHeight_percent="0.4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />

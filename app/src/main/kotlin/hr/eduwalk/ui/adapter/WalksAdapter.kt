@@ -25,7 +25,6 @@ class WalksAdapter(
         binding = ItemWalkBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
 
-
     override fun onBindViewHolder(holder: WalkViewHolder, position: Int) = holder.bind(walk = getItem(position))
 
     inner class WalkViewHolder(private val binding: ItemWalkBinding) : ViewHolder(binding.root) {

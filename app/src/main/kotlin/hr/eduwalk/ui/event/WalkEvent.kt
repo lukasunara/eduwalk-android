@@ -1,10 +1,12 @@
 package hr.eduwalk.ui.event
 
-import hr.eduwalk.data.model.LocationWithScore
+import hr.eduwalk.data.model.WalkScore
 
 sealed interface WalkEvent {
 
-    data class ShowLocations(val locationsWithScores: List<LocationWithScore>) : WalkEvent
-
-    data class UpdateScore(val total: Int, val max: Int) : WalkEvent
+    data class ShowLeaderboard(
+        val walkScores: List<WalkScore>,
+        val currentUserScore: Int,
+        val currentUserUsername: String,
+    ) : WalkEvent
 }

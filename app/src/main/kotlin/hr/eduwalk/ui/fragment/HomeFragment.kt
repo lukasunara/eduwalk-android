@@ -64,6 +64,7 @@ class HomeFragment : BaseFragment(contentLayoutId = R.layout.fragment_home) {
                         // no-op
                     }
                 }
+                viewModel.onEventConsumed()
             }
         }
     }
