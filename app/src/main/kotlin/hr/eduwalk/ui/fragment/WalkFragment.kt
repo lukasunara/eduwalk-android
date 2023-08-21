@@ -4,10 +4,14 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
+import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +21,14 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
@@ -35,6 +47,7 @@ import hr.eduwalk.ui.dialog.PermissionRationaleDialog
 import hr.eduwalk.ui.dialog.WalkInfoDialog
 import hr.eduwalk.ui.event.WalkEvent
 import hr.eduwalk.ui.viewmodel.WalkViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -50,8 +63,22 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
     private lateinit var mapView: MapView
     private lateinit var googleMap: GoogleMap
 
-    private val permissions = listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+    private val locationRequest = LocationRequest.Builder(
+        Priority.PRIORITY_HIGH_ACCURACY,
+        LOCATION_UPDATE_INTERVAL_IN_MILLISECONDS,
+    ).build()
 
+    private val locationSettingsRequest: LocationSettingsRequest by lazy {
+        LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
+            .build()
+    }
+    private var areLocationRequestsEnabled = false
+    private var currentLocation: Location? = null
+    private lateinit var locationCallback: LocationCallback
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    private val permissions = listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
     private val permissionRequest = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
@@ -75,21 +102,20 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        createLocationCallback()
         viewModel.start(walkId = args.walk.id)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        checkPermissions()
     }
 
     override fun onResume() {
         super.onResume()
+        checkPermissions()
         mapView.onResume()
     }
 
     override fun onPause() {
         super.onPause()
+        stopLocationUpdates()
         mapView.onPause()
     }
 
@@ -227,7 +253,13 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
     @SuppressLint("MissingPermission")
     private fun onPermissionGranted() {
         if (isLocationEnabled()) {
-            googleMap.isMyLocationEnabled = true
+            if (!areLocationRequestsEnabled) checkLocationSettings()
+            lifecycleScope.launch {
+                delay(CHECK_LOCATION_SETTINGS_DELAY)
+                getLastLocation()
+                if (areLocationRequestsEnabled) startLocationUpdates()
+                googleMap.isMyLocationEnabled = true
+            }
         } else {
             PermissionRationaleDialog(
                 context = requireContext(),
@@ -254,10 +286,76 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
         startActivity(intent)
     }
 
+    @SuppressLint("MissingPermission")
+    private fun getLastLocation() {
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location -> currentLocation = location }
+            .addOnFailureListener { e -> Log.e(this::class.java.simpleName, e.toString()) }
+    }
+
+    private fun checkLocationSettings() {
+        LocationServices
+            .getSettingsClient(requireContext())
+            .checkLocationSettings(locationSettingsRequest)
+            .addOnSuccessListener {
+                // All location settings are satisfied. The client can initialize location requests here.
+                Log.d(this::class.java.simpleName, "All location settings are satisfied.")
+                areLocationRequestsEnabled = true
+            }
+            .addOnFailureListener { e ->
+                e.printStackTrace()
+                if (e is ResolvableApiException) {
+                    // Location settings are not satisfied, but this can be fixed by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+//                        e.startResolutionForResult(this@MainActivity, REQUEST_CHECK_SETTINGS)
+                    } catch (sendEx: IntentSender.SendIntentException) {
+                        // Ignore the error.
+                    }
+                }
+            }
+    }
+
+    private fun createLocationCallback() {
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+//                Log.d("SUKI", "lastLocation: ${locationResult.lastLocation}")
+//                locationResult.lastLocation?.let { lastLocation ->
+//                    map?.apply {
+//                        animateCamera(
+//                            CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), ZOOM_LEVEL)
+//                        )
+//                    }
+//                    MARKERS_LAT_LNG_LIST.forEach { (title, latLng) ->
+//                        val markerLocation = Location(title).apply {
+//                            latitude = latLng.latitude
+//                            longitude = latLng.longitude
+//                        }
+//                        val distance = markerLocation.distanceTo(lastLocation)
+//                        Log.d("SUKI", "Distance from last location to $title is $distance m")
+//                    }
+//                }
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun startLocationUpdates() {
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+    }
+
+    private fun stopLocationUpdates() {
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
     private companion object {
         const val MIN_ZOOM = 15f
         const val BOUNDS_THRESHOLD = 0.0007
         const val MARKER_DISABLED_ALPHA = 0.7f
+        const val CHECK_LOCATION_SETTINGS_DELAY = 1000L
+        const val LOCATION_UPDATE_INTERVAL_IN_MILLISECONDS = 10000L
 
         // Croatia bounds
         const val DEFAULT_WEST_LONGITUDE = 13.5
