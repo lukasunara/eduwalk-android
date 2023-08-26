@@ -220,7 +220,7 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
         val locationWithScore = marker.tag as LocationWithScore
 
         if (enabledLocationIds.contains(locationWithScore.location.id)) {
-            // TODO: show bottom sheet
+            navController.navigate(WalkFragmentDirections.showLocationBottomSheet(locationWithScore))
         }
         return true
     }

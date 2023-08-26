@@ -48,6 +48,20 @@
         <argument
             android:name="walk"
             app:argType="hr.eduwalk.data.model.Walk" />
+
+        <action
+            android:id="@+id/show_location_bottom_sheet"
+            app:destination="@id/bottom_sheet_dialog_fragment_location" />
     </fragment>
+
+    <dialog
+        android:id="@+id/bottom_sheet_dialog_fragment_location"
+        android:name="hr.eduwalk.ui.fragment.bottomsheet.LocationBottomSheetFragment"
+        tools:layout="@layout/bottom_sheet_dialog_fragment_location">
+
+        <argument
+            android:name="locationWithScore"
+            app:argType="hr.eduwalk.data.model.LocationWithScore" />
+    </dialog>
 
 </navigation>
