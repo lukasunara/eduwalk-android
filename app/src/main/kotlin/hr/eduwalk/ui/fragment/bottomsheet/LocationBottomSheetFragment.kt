@@ -2,7 +2,6 @@ package hr.eduwalk.ui.fragment.bottomsheet
 
 import android.os.Bundle
 import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,20 +21,17 @@ class LocationBottomSheetFragment : BaseBottomSheetFragment(contentLayoutId = R.
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = BottomSheetDialogFragmentLocationBinding.inflate(inflater, container, false)
-        Log.d("SUKI", "LocationBottomSheetFragment -> onCreateView")
         return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("SUKI", "LocationBottomSheetFragment -> onViewCreated -> locationWithScore=${args.locationWithScore}")
         bestScore = args.locationWithScore.score
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("SUKI", "LocationBottomSheetFragment -> onDestroy")
+    override fun onDestroyView() {
+        super.onDestroyView()
         binding = null
     }
 
@@ -45,7 +41,11 @@ class LocationBottomSheetFragment : BaseBottomSheetFragment(contentLayoutId = R.
                 dismiss()
                 with(args.locationWithScore) {
                     navController.navigate(
-                        directions = LocationBottomSheetFragmentDirections.navigateToQuizFragment(location.id, location.title, bestScore ?: -1)
+                        directions = LocationBottomSheetFragmentDirections.navigateToQuizFragment(
+                            location.id,
+                            location.title,
+                            bestScore ?: -1
+                        )
                     )
                 }
             }

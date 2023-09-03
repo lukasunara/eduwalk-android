@@ -46,10 +46,10 @@ class QuizViewModel @Inject constructor(
 
     fun onNextQuestionClicked() {
         val questions = questions ?: return
-        val questionNumber = uiStateFlow.value.questionNumber ?: return
+        val questionIndex = uiStateFlow.value.questionIndex ?: return
 
-        if (questionNumber < EduWalkRepository.NUMBER_OF_QUESTIONS_PER_QUIZ) {
-            uiStateFlow.update { it.copy(question = questions[questionNumber + 1], questionNumber = questionNumber + 1) }
+        if (questionIndex + 1 < EduWalkRepository.NUMBER_OF_QUESTIONS_PER_QUIZ) {
+            uiStateFlow.update { it.copy(question = questions[questionIndex + 1], questionIndex = questionIndex + 1) }
         } else {
             viewModelScope.launch {
                 val isNewBestScore = correctAnswers > currentScore
@@ -75,7 +75,7 @@ class QuizViewModel @Inject constructor(
                 response = eduWalkRepository.getLocationQuestions(locationId = locationId),
             ) ?: return@launch
             this@QuizViewModel.questions = questions
-            uiStateFlow.update { it.copy(question = questions.firstOrNull(), questionNumber = 1) }
+            uiStateFlow.update { it.copy(question = questions.firstOrNull(), questionIndex = 0) }
         }
     }
 }

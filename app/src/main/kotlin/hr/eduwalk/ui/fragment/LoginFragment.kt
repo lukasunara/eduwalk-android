@@ -29,8 +29,8 @@ class LoginFragment : BaseFragment(contentLayoutId = R.layout.fragment_login) {
         return binding?.root
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         binding = null
     }
 

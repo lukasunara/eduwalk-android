@@ -2,7 +2,6 @@ package hr.eduwalk.ui.fragment
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import hr.eduwalk.R
 import hr.eduwalk.databinding.FragmentQuizBinding
+import hr.eduwalk.networking.EduWalkRepository
 import hr.eduwalk.ui.adapter.AnswersAdapter
 import hr.eduwalk.ui.event.QuizEvent
 import hr.eduwalk.ui.viewmodel.QuizViewModel
@@ -26,10 +26,12 @@ class QuizFragment : BaseFragment(contentLayoutId = R.layout.fragment_quiz) {
     override val viewModel: QuizViewModel by viewModels()
 
     override var onBackPressedListener: (() -> Unit)? = {
-        if (binding?.nextQuestionButton?.isEnabled == true) {
-            binding?.nextQuestionButton?.callOnClick()
-        } else {
-            showAlertDialog()
+        when {
+            binding?.startQuizGroup?.isVisible == true -> navController.popBackStack()
+            binding?.nextQuestionButton?.isEnabled == true && binding?.nextQuestionButton?.text == getString(R.string.quit_quiz) -> {
+                binding?.nextQuestionButton?.callOnClick()
+            }
+            else -> showAlertDialog()
         }
     }
 
@@ -48,13 +50,11 @@ class QuizFragment : BaseFragment(contentLayoutId = R.layout.fragment_quiz) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("SUKI", "QuizFragment -> locationId=${args.locationId}, currentScore=${args.currentScore}")
         viewModel.start(locationId = args.locationId, currentScore = args.currentScore)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("SUKI", "QuizFragment -> onDestroy")
+    override fun onDestroyView() {
+        super.onDestroyView()
         binding = null
     }
 
@@ -78,10 +78,10 @@ class QuizFragment : BaseFragment(contentLayoutId = R.layout.fragment_quiz) {
                         binding?.apply {
                             startQuizGroup.isVisible = false
                             questionsGroup.isVisible = true
+                            toolbar.toolbarSubtitle.isVisible = true
                         }
                     }
                     is QuizEvent.FinishQuiz -> {
-                        Log.d("SUKI", "QuizFragment -> FinishQuiz -> newScore=${event.correctAnswers}")
                         val bundle = bundleOf("newScore" to event.correctAnswers, "locationId" to args.locationId)
                         setFragmentResult("quizFragmentResult", bundle)
                         navController.navigateUp()
@@ -96,13 +96,10 @@ class QuizFragment : BaseFragment(contentLayoutId = R.layout.fragment_quiz) {
                 uiState.question?.let { question ->
                     binding?.apply {
                         questionText.text = question.questionText
-                        toolbar.toolbarSubtitle.apply {
-                            text = getString(R.string.question_number, uiState.questionNumber ?: 0)
-                            isVisible = true
-                        }
+                        toolbar.toolbarSubtitle.text = getString(R.string.question_number, (uiState.questionIndex ?: 0) + 1)
                         nextQuestionButton.apply {
-                            uiState.questionNumber?.let {
-                                if (it == 3) {
+                            uiState.questionIndex?.let {
+                                if (it == EduWalkRepository.NUMBER_OF_QUESTIONS_PER_QUIZ - 1) {
                                     text = getString(R.string.quit_quiz)
                                 }
                             }

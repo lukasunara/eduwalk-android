@@ -44,6 +44,6 @@ interface EduWalkApiService {
     suspend fun getLocationQuestions(@Path("locationId") locationId: Int): LocationQuestionsResponse
 
     /* --- LocationScore --- */
-    @GET("/locationScore/createOrUpdate")
+    @POST("/locationScore/createOrUpdate")
     suspend fun updateLocationScore(@Body locationScoreBody: UpdateLocationScoreBody): EmptyResponse
 }

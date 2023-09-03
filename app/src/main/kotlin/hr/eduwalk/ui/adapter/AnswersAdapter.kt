@@ -1,10 +1,13 @@
 package hr.eduwalk.ui.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -33,12 +36,14 @@ class AnswersAdapter(
 
     override fun onBindViewHolder(holder: AnswerViewHolder, position: Int) = holder.bind(answer = getItem(position), position = position)
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateList(answers: List<String>, correctAnswer: String) {
         canShowCorrectAnswer = false
         correctAnswerPosition = null
         this.correctAnswer = correctAnswer
 
         submitList(answers)
+        notifyDataSetChanged()
     }
 
     private fun showCorrectAnswer() = correctAnswerPosition?.let { notifyItemChanged(it) }
@@ -48,6 +53,14 @@ class AnswersAdapter(
         fun bind(answer: String, position: Int) = with(binding) {
             answerText.text = answer
             answerLetter.text = LETTERS_MAP[position]!!
+
+            if (!canShowCorrectAnswer) {
+                updateUi(
+                    textColorResId = R.color.black,
+                    backgroundColorResId = R.color.seed_light,
+                    iconDrawableResId = null,
+                )
+            }
 
             val isCorrect = answer == correctAnswer
             if (isCorrect) {
@@ -61,6 +74,8 @@ class AnswersAdapter(
                 }
             }
             root.setOnClickListener {
+                if (canShowCorrectAnswer) return@setOnClickListener
+
                 onAnswerSelected(isCorrect)
                 canShowCorrectAnswer = true
                 if (!isCorrect) {
@@ -77,7 +92,7 @@ class AnswersAdapter(
         private fun updateUi(
             @ColorRes textColorResId: Int,
             @ColorRes backgroundColorResId: Int,
-            @DrawableRes iconDrawableResId: Int,
+            @DrawableRes iconDrawableResId: Int?,
         ) {
             binding.apply {
                 val context = root.context
@@ -87,7 +102,12 @@ class AnswersAdapter(
                 answerLetter.setTextColor(textColor)
                 answerText.setTextColor(textColor)
 
-                resultIcon.setImageDrawable(ContextCompat.getDrawable(context, iconDrawableResId))
+                iconDrawableResId?.let {
+                    resultIcon.setImageDrawable(ContextCompat.getDrawable(context, iconDrawableResId))
+                    resultIcon.isVisible = true
+                } ?: run {
+                    resultIcon.visibility = View.INVISIBLE
+                }
             }
         }
     }

@@ -98,8 +98,6 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
         val binding = FragmentWalkBinding.inflate(inflater, container, false)
         this.binding = binding
 
-        Log.d("SUKI", "WalkFragment -> onCreateView")
-
         mapView = binding.mapView
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
@@ -109,7 +107,6 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("SUKI", "WalkFragment -> onViewCreated")
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         createLocationCallback()
@@ -118,46 +115,39 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
 
     override fun onStart() {
         super.onStart()
-        Log.d("SUKI", "WalkFragment -> onStart")
         mapView.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d("SUKI", "WalkFragment -> onResume")
         checkPermissions()
         mapView.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        Log.d("SUKI", "WalkFragment -> onPause")
         stopLocationUpdates()
         mapView.onPause()
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d("SUKI", "WalkFragment -> onStop")
         mapView.onStop()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d("SUKI", "WalkFragment -> onDestroyView")
         viewModel.onDestroyView()
         binding = null
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("SUKI", "WalkFragment -> onDestroy")
         mapView.onDestroy()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        Log.d("SUKI", "WalkFragment -> onSaveInstanceState")
         mapView.onSaveInstanceState(outState)
     }
 
@@ -185,7 +175,6 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
         setFragmentResultListener("quizFragmentResult") { _, result ->
             val newScore = result.getInt("newScore")
             val locationId = result.getInt("locationId")
-            Log.d("SUKI", "WalkFragment -> fragment result -> newScore=$newScore")
             viewModel.onNewLocationScoreReceived(locationId = locationId, newLocationScore = newScore)
         }
         binding?.apply {
@@ -221,8 +210,6 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
         }
         lifecycleScope.launch {
             viewModel.uiStateFlow.collect { uiState ->
-                Log.d("SUKI", "WalkFragment -> uiState=$uiState")
-
                 updateLocations(locationsWithScores = uiState.locationsWithScores)
                 binding?.toolbar?.toolbarSubtitle?.apply {
                     isVisible = true

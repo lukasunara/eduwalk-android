@@ -1,6 +1,5 @@
 package hr.eduwalk.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.eduwalk.data.model.LocationWithScore
@@ -25,13 +24,11 @@ class WalkViewModel @Inject constructor(
     private lateinit var walkId: String
 
     fun start(walkId: String) {
-        Log.d("SUKI", "WalkViewModel -> start")
         this.walkId = walkId
         getWalkLocationsWithScores()
     }
 
     fun onShowLeaderboardClicked() {
-        Log.d("SUKI", "WalkViewModel -> showLeaderboard")
         viewModelScope.launch {
             val walkScores = handleErrorResponse(response = eduWalkRepository.getTop5WalkScores(walkId = walkId)) ?: return@launch
             eventsFlow.emit(
@@ -47,7 +44,6 @@ class WalkViewModel @Inject constructor(
     fun onNewLocationScoreReceived(locationId: Int, newLocationScore: Int) {
         val oldLocationScore = locationsWithScores.first { it.location.id == locationId }.score
         if (oldLocationScore == null || newLocationScore > oldLocationScore) {
-            Log.d("SUKI", "WalkViewModel -> onNewLocationScoreReceived has new best score")
             viewModelScope.launch {
                 locationsWithScores.forEach {
                     if (it.location.id == locationId) {
@@ -70,7 +66,6 @@ class WalkViewModel @Inject constructor(
     }
 
     private fun getWalkLocationsWithScores() {
-        Log.d("SUKI", "WalkViewModel -> getWalkLocationsWithScores")
         viewModelScope.launch {
             locationsWithScores = handleErrorResponse(
                 response = eduWalkRepository.getLocationsWithScores(walkId = walkId)
@@ -89,7 +84,6 @@ class WalkViewModel @Inject constructor(
     }
 
     private fun updateWalkScore() {
-        Log.d("SUKI", "WalkViewModel -> updateWalkScore")
         uiStateFlow.update {
             it.copy(
                 maxScore = EduWalkRepository.NUMBER_OF_QUESTIONS_PER_QUIZ * locationsWithScores.size,

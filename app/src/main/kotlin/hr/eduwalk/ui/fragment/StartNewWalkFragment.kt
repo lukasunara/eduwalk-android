@@ -37,8 +37,8 @@ class StartNewWalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_st
         viewModel.start()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         binding = null
     }
 
