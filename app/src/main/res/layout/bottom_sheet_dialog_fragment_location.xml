@@ -60,18 +60,18 @@
             android:paddingHorizontal="16dp"
             android:paddingVertical="4dp"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@id/start_quiz_button"
+            app:layout_constraintBottom_toTopOf="@id/go_to_quiz_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="This is a description." />
 
         <Button
-            android:id="@+id/start_quiz_button"
+            android:id="@+id/go_to_quiz_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:padding="16dp"
-            android:text="@string/start_quiz"
+            android:text="@string/go_to_quiz"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

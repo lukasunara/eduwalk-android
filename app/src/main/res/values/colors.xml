@@ -4,9 +4,9 @@
     <color name="primary_variant">#001f27</color>
     <color name="on_primary">@color/white</color>
     <color name="secondary">#4b626a</color>
-<!--    <color name="secondary">#585c7e</color>-->
+    <!--    <color name="secondary">#585c7e</color>-->
     <color name="secondary_variant">#061e25</color>
-<!--    <color name="secondary_variant">#151937</color>-->
+    <!--    <color name="secondary_variant">#151937</color>-->
     <color name="on_secondary">@color/white</color>
     <color name="accent">#59d5f8</color>
 

@@ -19,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
@@ -97,6 +98,8 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
         val binding = FragmentWalkBinding.inflate(inflater, container, false)
         this.binding = binding
 
+        Log.d("SUKI", "WalkFragment -> onCreateView")
+
         mapView = binding.mapView
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
@@ -106,6 +109,8 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("SUKI", "WalkFragment -> onViewCreated")
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         createLocationCallback()
         viewModel.start(walkId = args.walk.id)
@@ -113,24 +118,28 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
 
     override fun onResume() {
         super.onResume()
+        Log.d("SUKI", "WalkFragment -> onResume")
         checkPermissions()
         mapView.onResume()
     }
 
     override fun onPause() {
         super.onPause()
+        Log.d("SUKI", "WalkFragment -> onPause")
         stopLocationUpdates()
         mapView.onPause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.d("SUKI", "WalkFragment -> onDestroy")
         mapView.onDestroy()
         binding = null
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        Log.d("SUKI", "WalkFragment -> onSaveInstanceState")
         mapView.onSaveInstanceState(outState)
     }
 
@@ -155,6 +164,12 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
 
     override fun setupListeners() {
         super.setupListeners()
+        setFragmentResultListener("locationBottomSheetFragmentResult") { _, result ->
+            val newScore = result.getInt("newScore")
+            val locationId = result.getInt("locationId")
+            Log.d("SUKI", "WalkFragment -> fragment result -> newScore=$newScore")
+            viewModel.onNewLocationScoreReceived(locationId = locationId, newLocationScore = newScore)
+        }
         binding?.apply {
             toolbar.apply {
                 backButton.setOnClickListener { navController.popBackStack() }
@@ -181,9 +196,7 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
                             currentUserUsername = event.currentUserUsername,
                         ).show()
                     }
-                    null -> {
-                        // no-op
-                    }
+                    null -> {} // no-op
                 }
                 viewModel.onEventConsumed()
             }

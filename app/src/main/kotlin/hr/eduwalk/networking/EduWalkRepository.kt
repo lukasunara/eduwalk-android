@@ -7,6 +7,7 @@ import hr.eduwalk.data.model.Walk
 import hr.eduwalk.data.model.WalkScore
 import hr.eduwalk.data.sharedprefs.SharedPreferencesRepository
 import hr.eduwalk.networking.model.ApiResponse
+import hr.eduwalk.networking.model.UpdateLocationScoreBody
 import hr.eduwalk.networking.model.toApiResponse
 import javax.inject.Inject
 import retrofit2.HttpException
@@ -48,6 +49,10 @@ class EduWalkRepository @Inject constructor(
     }.toApiResponse()
 
     /* --- WalkScore --- */
+    suspend fun createOrUpdateWalkScore(walkId: String, newScore: Int): ApiResponse<Unit?> = handleErrorResponse {
+        apiService.createOrUpdateWalkScore(walkScore = WalkScore(username = getUser()!!.username, walkId = walkId, score = newScore))
+    }.toApiResponse()
+
     suspend fun getTop5WalkScores(walkId: String): ApiResponse<List<WalkScore>?> = handleErrorResponse {
         apiService.getTop5WalkScores(walkId = walkId)
     }.toApiResponse()

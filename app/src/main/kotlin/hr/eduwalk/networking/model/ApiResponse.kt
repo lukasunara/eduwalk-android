@@ -5,16 +5,21 @@ sealed class ApiResponse<out T : Any?> {
     data class Error(val errorMessage: String) : ApiResponse<Nothing>()
 }
 
+fun EmptyResponse.toApiResponse() = when (error) {
+    null -> ApiResponse.Success(data = data)
+    else -> ApiResponse.Error(errorMessage = error.toString())
+}
+
 fun UserResponse.toApiResponse() = when (error) {
     null -> ApiResponse.Success(data = user)
     else -> ApiResponse.Error(errorMessage = error.toString())
 }
 
-//fun ServiceResult<List<Question>>.toLocationQuestionsResponse() = when (this) {
-//    is ServiceResult.Success -> LocationQuestionsResponse(questions = data)
-//    is ServiceResult.Error -> LocationQuestionsResponse(error = error)
-//}
-//
+fun LocationQuestionsResponse.toApiResponse() = when (error) {
+    null -> ApiResponse.Success(data = questions)
+    else -> ApiResponse.Error(errorMessage = error.toString())
+}
+
 //fun ServiceResult<LocationScore>.toLocationScoreResponse() = when (this) {
 //    is ServiceResult.Success -> LocationScoreResponse(locationScore = data)
 //    is ServiceResult.Error -> LocationScoreResponse(error = error)
@@ -55,7 +60,3 @@ fun WalksResponse.toApiResponse() = when (error) {
 //    is ServiceResult.Error -> WalkIdsResponse(error = error)
 //}
 //
-//fun ServiceResult<Unit>.toEmptyResponse() = when (this) {
-//    is ServiceResult.Success -> EmptyResponse(data = data)
-//    is ServiceResult.Error -> EmptyResponse(error = error)
-//}

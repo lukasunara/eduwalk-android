@@ -8,6 +8,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+data class EmptyResponse(
+    @SerialName("data") val data: Unit? = null,
+    @SerialName("error") val error: ResponseError? = null,
+)
+
+@Serializable
 data class UserResponse(
     @SerialName("user") val user: User? = null,
     @SerialName("error") val error: ResponseError? = null,
@@ -67,8 +73,3 @@ data class WalksResponse(
 //    val error: ResponseError? = null,
 //)
 //
-//@Serializable
-//data class EmptyResponse(
-//    val data: Unit? = null,
-//    val error: ResponseError? = null,
-//)

@@ -1,8 +1,11 @@
 package hr.eduwalk.data.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Parcelize
 @Serializable
 data class Location(
     @SerialName("id") val id: Int,
@@ -13,4 +16,4 @@ data class Location(
     @SerialName("imageBase64") val imageBase64: String?,
     @SerialName("thresholdDistance") val thresholdDistance: Int,
     @SerialName("walkId") val walkId: String,
-)
+) : Parcelable
