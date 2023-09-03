@@ -50,6 +50,15 @@ class HomeFragment : BaseFragment(contentLayoutId = R.layout.fragment_home) {
             startNewWalkButton.setOnClickListener {
                 navController.navigate(directions = HomeFragmentDirections.navigateToStartNewWalkFragment())
             }
+            oldWalksButton.setOnClickListener {
+                navController.navigate(directions = HomeFragmentDirections.navigateToOldWalksFragment())
+            }
+            createNewWalkButton.setOnClickListener {
+                // TODO
+            }
+            myWalksButton.setOnClickListener {
+                // TODO
+            }
             logoutButton.setOnClickListener { viewModel.onLogoutClicked() }
         }
     }
@@ -60,9 +69,7 @@ class HomeFragment : BaseFragment(contentLayoutId = R.layout.fragment_home) {
             viewModel.eventsFlow.collect { event ->
                 when (event) {
                     is HomeEvent.UserLogout -> navController.navigate(directions = HomeFragmentDirections.navigateToLoginFragment())
-                    null -> {
-                        // no-op
-                    }
+                    null -> {} // no-op
                 }
                 viewModel.onEventConsumed()
             }

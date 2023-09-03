@@ -10,6 +10,7 @@ import hr.eduwalk.networking.model.UserResponse
 import hr.eduwalk.networking.model.WalkResponse
 import hr.eduwalk.networking.model.WalkScoreTop5Response
 import hr.eduwalk.networking.model.WalksResponse
+import hr.eduwalk.networking.model.WalksWithScoresResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -27,6 +28,9 @@ interface EduWalkApiService {
 
     @GET("/walk/getDefaultWalks")
     suspend fun getDefaultWalks(): WalksResponse
+
+    @GET("join/getWalksWithScores")
+    suspend fun getWalksWithScores(@Query("username") username: String): WalksWithScoresResponse
 
     /* --- Walk --- */
     @GET("join/getLocationsWithScores")

@@ -6,6 +6,7 @@ import hr.eduwalk.data.model.Question
 import hr.eduwalk.data.model.User
 import hr.eduwalk.data.model.Walk
 import hr.eduwalk.data.model.WalkScore
+import hr.eduwalk.data.model.WalkWithScore
 import hr.eduwalk.data.sharedprefs.SharedPreferencesRepository
 import hr.eduwalk.networking.model.ApiResponse
 import hr.eduwalk.networking.model.UpdateLocationScoreBody
@@ -34,6 +35,10 @@ class EduWalkRepository @Inject constructor(
     fun logoutUser() = sharedPreferencesRepository.setObject<User>(key = SharedPreferencesRepository.KEY_USER, value = null)
 
     fun saveUserData(user: User) = sharedPreferencesRepository.setObject(key = SharedPreferencesRepository.KEY_USER, value = user)
+
+    suspend fun getWalksWithScores(): ApiResponse<List<WalkWithScore>?> = handleErrorResponse {
+        apiService.getWalksWithScores(username = getUser()!!.username)
+    }.toApiResponse()
 
     /* --- Walk --- */
     suspend fun getWalk(walkId: String): ApiResponse<Walk?> = handleErrorResponse {

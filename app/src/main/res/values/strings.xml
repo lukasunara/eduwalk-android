@@ -48,4 +48,7 @@
     <string name="start_the_quiz_when_ready">Start the quiz when you\'re ready!</string>
     <string name="quit_quiz">Završi kviz</string>
     <string name="question_number">%d. Pitanje</string>
+
+    <!-- Old Walks -->
+    <string name="choose_old_walk">Nastavi s jednom od ranije započetih šetnji</string>
 </resources>

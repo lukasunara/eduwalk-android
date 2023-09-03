@@ -27,12 +27,27 @@
         <action
             android:id="@+id/navigate_to_start_new_walk_fragment"
             app:destination="@id/fragment_start_new_walk" />
+
+        <action
+            android:id="@+id/navigate_to_old_walks_fragment"
+            app:destination="@id/fragment_old_walks" />
     </fragment>
 
     <fragment
         android:id="@+id/fragment_start_new_walk"
         android:name="hr.eduwalk.ui.fragment.StartNewWalkFragment"
         tools:layout="@layout/fragment_start_new_walk">
+
+        <action
+            android:id="@+id/navigate_to_walk_fragment"
+            app:destination="@id/fragment_walk"
+            app:popUpTo="@id/fragment_home" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_old_walks"
+        android:name="hr.eduwalk.ui.fragment.OldWalksFragment"
+        tools:layout="@layout/fragment_old_walks">
 
         <action
             android:id="@+id/navigate_to_walk_fragment"

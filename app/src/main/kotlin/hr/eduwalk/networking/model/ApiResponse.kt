@@ -60,3 +60,7 @@ fun WalksResponse.toApiResponse() = when (error) {
 //    is ServiceResult.Error -> WalkIdsResponse(error = error)
 //}
 //
+fun WalksWithScoresResponse.toApiResponse() = when (error) {
+    null -> ApiResponse.Success(data = walksWithScores)
+    else -> ApiResponse.Error(errorMessage = error.toString())
+}
