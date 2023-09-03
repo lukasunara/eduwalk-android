@@ -116,6 +116,12 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
         viewModel.start(walkId = args.walk.id)
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.d("SUKI", "WalkFragment -> onStart")
+        mapView.onStart()
+    }
+
     override fun onResume() {
         super.onResume()
         Log.d("SUKI", "WalkFragment -> onResume")
@@ -130,11 +136,23 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
         mapView.onPause()
     }
 
+    override fun onStop() {
+        super.onStop()
+        Log.d("SUKI", "WalkFragment -> onStop")
+        mapView.onStop()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d("SUKI", "WalkFragment -> onDestroyView")
+        viewModel.onDestroyView()
+        binding = null
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         Log.d("SUKI", "WalkFragment -> onDestroy")
         mapView.onDestroy()
-        binding = null
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -164,7 +182,7 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
 
     override fun setupListeners() {
         super.setupListeners()
-        setFragmentResultListener("locationBottomSheetFragmentResult") { _, result ->
+        setFragmentResultListener("quizFragmentResult") { _, result ->
             val newScore = result.getInt("newScore")
             val locationId = result.getInt("locationId")
             Log.d("SUKI", "WalkFragment -> fragment result -> newScore=$newScore")
@@ -203,6 +221,8 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
         }
         lifecycleScope.launch {
             viewModel.uiStateFlow.collect { uiState ->
+                Log.d("SUKI", "WalkFragment -> uiState=$uiState")
+
                 updateLocations(locationsWithScores = uiState.locationsWithScores)
                 binding?.toolbar?.toolbarSubtitle?.apply {
                     isVisible = true

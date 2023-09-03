@@ -84,7 +84,8 @@
 
         <action
             android:id="@+id/navigate_to_quiz_fragment"
-            app:destination="@id/fragment_quiz" />
+            app:destination="@id/fragment_quiz"
+            app:popUpTo="@id/fragment_walk" />
     </dialog>
 
 </navigation>

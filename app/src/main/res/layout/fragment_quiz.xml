@@ -43,12 +43,12 @@
                 android:gravity="center"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="4dp"
+                android:text="@string/start_the_quiz_when_ready"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@id/start_quiz_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/quiz_image"
-                tools:text="Start the quiz when you're ready!" />
+                app:layout_constraintTop_toBottomOf="@id/quiz_image" />
 
             <Button
                 android:id="@+id/start_quiz_button"
@@ -109,7 +109,9 @@
                 android:id="@+id/questions_group"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:constraint_referenced_ids="question_text, answers_recycle_view, next_question_button" />
+                android:visibility="gone"
+                app:constraint_referenced_ids="question_text, answers_recycle_view, next_question_button"
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

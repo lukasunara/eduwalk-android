@@ -65,6 +65,10 @@ class WalkViewModel @Inject constructor(
         }
     }
 
+    fun onDestroyView() {
+        uiStateFlow.value = WalkUiState()
+    }
+
     private fun getWalkLocationsWithScores() {
         Log.d("SUKI", "WalkViewModel -> getWalkLocationsWithScores")
         viewModelScope.launch {

@@ -45,6 +45,7 @@
     <string name="do_you_want_to_exit_quiz">Ako prekineš kviz, neće se zapamtiti posljednji reultati!</string>
     <string name="next_question">Sljedeće pitanje</string>
     <string name="start_quiz">Započni kviz</string>
+    <string name="start_the_quiz_when_ready">Start the quiz when you\'re ready!</string>
     <string name="quit_quiz">Završi kviz</string>
     <string name="question_number">%d. Pitanje</string>
 </resources>

@@ -68,7 +68,7 @@
         android:paddingHorizontal="12dp"
         android:paddingVertical="16dp"
         android:src="@drawable/ic_leaderboard"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

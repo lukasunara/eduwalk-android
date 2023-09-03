@@ -82,7 +82,7 @@ class QuizFragment : BaseFragment(contentLayoutId = R.layout.fragment_quiz) {
                     }
                     is QuizEvent.FinishQuiz -> {
                         Log.d("SUKI", "QuizFragment -> FinishQuiz -> newScore=${event.correctAnswers}")
-                        val bundle = bundleOf("newScore" to event.correctAnswers)
+                        val bundle = bundleOf("newScore" to event.correctAnswers, "locationId" to args.locationId)
                         setFragmentResult("quizFragmentResult", bundle)
                         navController.navigateUp()
                     }
