@@ -38,5 +38,13 @@
     <!-- Location -->
     <string name="best_score">Najbolji rezultat: %d/3</string>
     <string name="best_score_unknown">Najbolji rezultat: nepoznat</string>
+    <string name="go_to_quiz">Idi na kviz</string>
+
+    <!-- Quiz -->
+    <string name="continue_quiz">Nastavi kviz</string>
+    <string name="do_you_want_to_exit_quiz">Ako prekineš kviz, neće se zapamtiti posljednji reultati!</string>
+    <string name="next_question">Sljedeće pitanje</string>
     <string name="start_quiz">Započni kviz</string>
+    <string name="quit_quiz">Završi kviz</string>
+    <string name="question_number">%d. Pitanje</string>
 </resources>

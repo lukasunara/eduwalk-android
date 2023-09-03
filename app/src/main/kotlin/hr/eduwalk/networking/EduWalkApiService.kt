@@ -5,6 +5,7 @@ import hr.eduwalk.data.model.WalkScore
 import hr.eduwalk.networking.model.EmptyResponse
 import hr.eduwalk.networking.model.LocationQuestionsResponse
 import hr.eduwalk.networking.model.LocationsWithScoresResponse
+import hr.eduwalk.networking.model.UpdateLocationScoreBody
 import hr.eduwalk.networking.model.UserResponse
 import hr.eduwalk.networking.model.WalkResponse
 import hr.eduwalk.networking.model.WalkScoreTop5Response
@@ -37,4 +38,12 @@ interface EduWalkApiService {
 
     @GET("/walkScore/getTop5")
     suspend fun getTop5WalkScores(@Query("walkId") walkId: String): WalkScoreTop5Response
+
+    /* --- Question --- */
+    @GET("/question/{locationId}")
+    suspend fun getLocationQuestions(@Path("locationId") locationId: Int): LocationQuestionsResponse
+
+    /* --- LocationScore --- */
+    @GET("/locationScore/createOrUpdate")
+    suspend fun updateLocationScore(@Body locationScoreBody: UpdateLocationScoreBody): EmptyResponse
 }

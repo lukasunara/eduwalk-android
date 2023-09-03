@@ -31,4 +31,8 @@
     <color name="purple">#585c7e</color>
     <color name="purple_dark">#151937</color>
     <color name="purple_light">#dfe0ff</color>
+
+    <color name="green">#32cd32</color>
+    <color name="green_dark">#355e3b</color>
+    <color name="green_light">#ecffdc</color>
 </resources>

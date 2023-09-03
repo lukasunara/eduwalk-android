@@ -54,6 +54,25 @@
             app:destination="@id/bottom_sheet_dialog_fragment_location" />
     </fragment>
 
+    <fragment
+        android:id="@+id/fragment_quiz"
+        android:name="hr.eduwalk.ui.fragment.QuizFragment"
+        tools:layout="@layout/fragment_quiz">
+
+        <argument
+            android:name="locationId"
+            app:argType="integer" />
+
+        <argument
+            android:name="locationTitle"
+            app:argType="string" />
+
+        <argument
+            android:name="currentScore"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
+
     <dialog
         android:id="@+id/bottom_sheet_dialog_fragment_location"
         android:name="hr.eduwalk.ui.fragment.bottomsheet.LocationBottomSheetFragment"
@@ -62,6 +81,10 @@
         <argument
             android:name="locationWithScore"
             app:argType="hr.eduwalk.data.model.LocationWithScore" />
+
+        <action
+            android:id="@+id/navigate_to_quiz_fragment"
+            app:destination="@id/fragment_quiz" />
     </dialog>
 
 </navigation>

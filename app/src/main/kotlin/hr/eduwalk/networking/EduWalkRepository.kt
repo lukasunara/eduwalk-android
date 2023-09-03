@@ -2,6 +2,7 @@ package hr.eduwalk.networking
 
 import com.google.gson.Gson
 import hr.eduwalk.data.model.LocationWithScore
+import hr.eduwalk.data.model.Question
 import hr.eduwalk.data.model.User
 import hr.eduwalk.data.model.Walk
 import hr.eduwalk.data.model.WalkScore
@@ -55,6 +56,22 @@ class EduWalkRepository @Inject constructor(
 
     suspend fun getTop5WalkScores(walkId: String): ApiResponse<List<WalkScore>?> = handleErrorResponse {
         apiService.getTop5WalkScores(walkId = walkId)
+    }.toApiResponse()
+
+    /* --- Question --- */
+    suspend fun getLocationQuestions(locationId: Int): ApiResponse<List<Question>?> = handleErrorResponse {
+        apiService.getLocationQuestions(locationId = locationId)
+    }.toApiResponse()
+
+    /* --- LocationScore --- */
+    suspend fun updateLocationScore(locationId: Int, newBestScore: Int): ApiResponse<Unit?> = handleErrorResponse {
+        apiService.updateLocationScore(
+            locationScoreBody = UpdateLocationScoreBody(
+                userId = getUser()!!.username,
+                locationId = locationId,
+                score = newBestScore,
+            )
+        )
     }.toApiResponse()
 
     companion object {
