@@ -2,7 +2,6 @@ package hr.eduwalk.ui.fragment
 
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import hr.eduwalk.R
+import hr.eduwalk.common.DefaultTextWatcher
 import hr.eduwalk.databinding.FragmentStartNewWalkBinding
 import hr.eduwalk.ui.adapter.WalksAdapter
 import hr.eduwalk.ui.event.StartNewWalkEvent
@@ -53,15 +53,7 @@ class StartNewWalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_st
             startWalkButton.setOnClickListener {
                 viewModel.onStartWalkClicked(walkId = walkIdEditText.text.toString())
             }
-            walkIdEditText.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                    // no-op
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    // no-op
-                }
-
+            walkIdEditText.addTextChangedListener(object : DefaultTextWatcher {
                 override fun afterTextChanged(s: Editable?) {
                     startWalkButton.isEnabled = s?.trim()?.length == WALK_ID_LENGTH
                 }
@@ -78,9 +70,7 @@ class StartNewWalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_st
                         navController.navigate(StartNewWalkFragmentDirections.navigateToWalkFragment(walk = event.walk))
                     }
                     is StartNewWalkEvent.ShowDefaultWalks -> walksAdapter.submitList(event.walks)
-                    null -> {
-                        // no-op
-                    }
+                    null -> {} // no-op
                 }
                 viewModel.onEventConsumed()
             }

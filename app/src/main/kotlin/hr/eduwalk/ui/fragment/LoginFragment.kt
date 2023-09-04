@@ -2,7 +2,6 @@ package hr.eduwalk.ui.fragment
 
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import hr.eduwalk.R
+import hr.eduwalk.common.DefaultTextWatcher
 import hr.eduwalk.databinding.FragmentLoginBinding
 import hr.eduwalk.ui.event.LoginEvent
 import hr.eduwalk.ui.viewmodel.LoginViewModel
@@ -40,15 +40,7 @@ class LoginFragment : BaseFragment(contentLayoutId = R.layout.fragment_login) {
             loginButton.setOnClickListener {
                 viewModel.onLoginClicked(username = usernameEditText.text.toString())
             }
-            usernameEditText.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                    // no-op
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    // no-op
-                }
-
+            usernameEditText.addTextChangedListener(object : DefaultTextWatcher {
                 override fun afterTextChanged(s: Editable?) {
                     loginButton.isEnabled = s?.isNotBlank() ?: false
                 }
@@ -62,9 +54,7 @@ class LoginFragment : BaseFragment(contentLayoutId = R.layout.fragment_login) {
             viewModel.eventsFlow.collect { event ->
                 when (event) {
                     is LoginEvent.FinishLogin -> navController.navigate(directions = LoginFragmentDirections.navigateToHomeFragment())
-                    null -> {
-                        // no-op
-                    }
+                    null -> {} // no-op
                 }
                 viewModel.onEventConsumed()
             }
