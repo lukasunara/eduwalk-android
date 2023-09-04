@@ -4,7 +4,7 @@
     <!-- Login -->
     <string name="login">Prijavi se</string>
     <string name="login_helper_text">Najviše 50 znakova</string>
-    <string name="username">Username</string>
+    <string name="username">Korisničko ime</string>
 
     <!-- Home -->
     <string name="create_new_routes">Stvori novu rutu</string>
@@ -51,4 +51,15 @@
 
     <!-- Old Walks -->
     <string name="choose_old_walk">Nastavi s jednom od ranije započetih šetnji</string>
+
+    <!-- Create/Edit Walk -->
+    <string name="cancel">Odustani</string>
+    <string name="create_walk">Stvori rutu</string>
+    <string name="edit_walk_description_hint_text">Opis i informacije o ruti</string>
+    <string name="edit_walk_do_you_want_to_exit">Ako napustiš ekran, neće se zapamtiti posljednje promjene!</string>
+    <string name="edit_walk_title_helper_text">Najviše 100 znakova</string>
+    <string name="edit_walk_title_hint_text">Naziv rute</string>
+    <string name="no_number_of_characters_limit">Tekst može biti proizvoljno dugačak</string>
+    <string name="save_changes">Spremi promjene</string>
+    <string name="quit">Izađi</string>
 </resources>

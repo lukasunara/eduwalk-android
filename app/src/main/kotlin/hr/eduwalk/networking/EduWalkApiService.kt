@@ -1,11 +1,13 @@
 package hr.eduwalk.networking
 
 import hr.eduwalk.data.model.User
+import hr.eduwalk.data.model.Walk
 import hr.eduwalk.data.model.WalkScore
 import hr.eduwalk.networking.model.EmptyResponse
 import hr.eduwalk.networking.model.LocationQuestionsResponse
 import hr.eduwalk.networking.model.LocationsWithScoresResponse
 import hr.eduwalk.networking.model.UpdateLocationScoreBody
+import hr.eduwalk.networking.model.UpdateWalkRequestBody
 import hr.eduwalk.networking.model.UserResponse
 import hr.eduwalk.networking.model.WalkResponse
 import hr.eduwalk.networking.model.WalkScoreTop5Response
@@ -35,6 +37,12 @@ interface EduWalkApiService {
     /* --- Walk --- */
     @GET("join/getLocationsWithScores")
     suspend fun getLocationsWithScores(@Query("walkId") walkId: String, @Query("username") username: String): LocationsWithScoresResponse
+
+    @POST("walk/create")
+    suspend fun createWalk(@Body walk: Walk): EmptyResponse
+
+    @POST("walk/{walkId}/update")
+    suspend fun updateWalkInfo(@Path("walkId") walkId: String, @Body updateWalkRequestBody: UpdateWalkRequestBody): EmptyResponse
 
     /* --- WalkScore --- */
     @POST("/walkScore/createOrUpdate")

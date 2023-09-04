@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UpdateWalkRequestBody(
-    val title: String,
-    val description: String?,
+    @SerialName("title") val title: String,
+    @SerialName("description") val description: String?,
 )
 
 @Serializable

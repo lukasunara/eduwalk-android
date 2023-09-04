@@ -54,7 +54,7 @@ class HomeFragment : BaseFragment(contentLayoutId = R.layout.fragment_home) {
                 navController.navigate(directions = HomeFragmentDirections.navigateToOldWalksFragment())
             }
             createNewWalkButton.setOnClickListener {
-                // TODO
+                navController.navigate(directions = HomeFragmentDirections.navigateToEditWalkInfoFragment())
             }
             myWalksButton.setOnClickListener {
                 // TODO

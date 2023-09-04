@@ -31,6 +31,10 @@
         <action
             android:id="@+id/navigate_to_old_walks_fragment"
             app:destination="@id/fragment_old_walks" />
+
+        <action
+            android:id="@+id/navigate_to_edit_walk_info_fragment"
+            app:destination="@id/fragment_edit_walk_info" />
     </fragment>
 
     <fragment
@@ -86,6 +90,18 @@
             android:name="currentScore"
             android:defaultValue="-1"
             app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_edit_walk_info"
+        android:name="hr.eduwalk.ui.fragment.EditWalkInfoFragment"
+        tools:layout="@layout/fragment_edit_walk_info">
+
+        <argument
+            android:name="walk"
+            android:defaultValue="@null"
+            app:argType="hr.eduwalk.data.model.Walk"
+            app:nullable="true" />
     </fragment>
 
     <dialog
