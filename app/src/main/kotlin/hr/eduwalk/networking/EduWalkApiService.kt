@@ -31,6 +31,9 @@ interface EduWalkApiService {
     @GET("/walk/getDefaultWalks")
     suspend fun getDefaultWalks(): WalksResponse
 
+    @GET("/walk/getUserCreatedWalks")
+    suspend fun getMyWalks(@Query("username") username: String): WalksResponse
+
     @GET("join/getWalksWithScores")
     suspend fun getWalksWithScores(@Query("username") username: String): WalksWithScoresResponse
 

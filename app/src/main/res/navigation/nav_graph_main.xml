@@ -33,8 +33,12 @@
             app:destination="@id/fragment_old_walks" />
 
         <action
-            android:id="@+id/navigate_to_edit_walk_info_fragment"
-            app:destination="@id/fragment_edit_walk_info" />
+            android:id="@+id/navigate_to_create_walk_fragment"
+            app:destination="@id/fragment_create_walk" />
+
+        <action
+            android:id="@+id/navigate_to_my_walks_fragment"
+            app:destination="@id/fragment_my_walks" />
     </fragment>
 
     <fragment
@@ -90,6 +94,48 @@
             android:name="currentScore"
             android:defaultValue="-1"
             app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_create_walk"
+        android:name="hr.eduwalk.ui.fragment.EditWalkInfoFragment"
+        tools:layout="@layout/fragment_edit_walk_info">
+
+        <argument
+            android:name="walk"
+            android:defaultValue="@null"
+            app:argType="hr.eduwalk.data.model.Walk"
+            app:nullable="true" />
+
+        <action
+            android:id="@+id/navigate_to_route_fragment"
+            app:destination="@id/fragment_route"
+            app:popUpTo="@id/fragment_home" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_my_walks"
+        android:name="hr.eduwalk.ui.fragment.MyWalksFragment"
+        tools:layout="@layout/fragment_my_walks">
+
+        <action
+            android:id="@+id/navigate_to_route_fragment"
+            app:destination="@id/fragment_route"
+            app:popUpTo="@id/fragment_home" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_route"
+        android:name="hr.eduwalk.ui.fragment.RouteFragment"
+        tools:layout="@layout/fragment_walk">
+
+        <argument
+            android:name="walk"
+            app:argType="hr.eduwalk.data.model.Walk" />
+
+        <action
+            android:id="@+id/navigate_to_edit_walk_info_fragment"
+            app:destination="@id/fragment_edit_walk_info" />
     </fragment>
 
     <fragment

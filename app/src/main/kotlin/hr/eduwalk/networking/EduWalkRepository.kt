@@ -64,6 +64,10 @@ class EduWalkRepository @Inject constructor(
         apiService.getDefaultWalks()
     }.toApiResponse()
 
+    suspend fun getMyWalks(): ApiResponse<List<Walk>?> = handleErrorResponse {
+        apiService.getMyWalks(username = getUser()!!.username)
+    }.toApiResponse()
+
     /* --- Location --- */
     suspend fun getLocationsWithScores(walkId: String): ApiResponse<List<LocationWithScore>?> = handleErrorResponse {
         apiService.getLocationsWithScores(walkId = walkId, username = getUser()!!.username)

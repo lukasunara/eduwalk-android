@@ -22,7 +22,7 @@ class StartNewWalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_st
     override val viewModel: StartNewWalkViewModel by viewModels()
 
     private val walksAdapter: WalksAdapter by lazy {
-        WalksAdapter(onWalkClickListener = viewModel::onDefaultWalkClicked)
+        WalksAdapter(onWalkClickListener = { walk -> viewModel.onDefaultWalkClicked(walkId = walk.id) })
     }
 
     private var binding: FragmentStartNewWalkBinding? = null

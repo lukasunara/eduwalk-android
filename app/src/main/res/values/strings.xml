@@ -62,4 +62,8 @@
     <string name="no_number_of_characters_limit">Tekst može biti proizvoljno dugačak</string>
     <string name="save_changes">Spremi promjene</string>
     <string name="quit">Izađi</string>
+
+    <!-- My Walks -->
+    <string name="choose_my_walk">Pregledaj i uredi jednu od svojih ruta</string>
+
 </resources>

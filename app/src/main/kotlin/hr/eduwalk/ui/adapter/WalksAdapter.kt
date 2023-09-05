@@ -18,7 +18,7 @@ private object WalkDiffCallback : DiffUtil.ItemCallback<Walk>() {
 }
 
 class WalksAdapter(
-    private val onWalkClickListener: (walkId: String) -> Unit,
+    private val onWalkClickListener: (walk: Walk) -> Unit,
 ) : ListAdapter<Walk, WalksAdapter.WalkViewHolder>(WalkDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = WalkViewHolder(
@@ -35,7 +35,7 @@ class WalksAdapter(
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     tooltipText = walk.description
                 }
-                setOnClickListener { onWalkClickListener(walk.id) }
+                setOnClickListener { onWalkClickListener(walk) }
             }
         }
     }
