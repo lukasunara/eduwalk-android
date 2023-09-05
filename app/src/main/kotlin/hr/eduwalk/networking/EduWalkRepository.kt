@@ -83,6 +83,10 @@ class EduWalkRepository @Inject constructor(
         apiService.getWalkLocations(walkId = walkId)
     }.toApiResponse()
 
+    suspend fun updateLocation(location: Location): ApiResponse<Unit?> = handleErrorResponse {
+        apiService.updateLocation(locationId = location.id, location = location)
+    }.toApiResponse()
+
     /* --- WalkScore --- */
     suspend fun createOrUpdateWalkScore(walkId: String, newScore: Int): ApiResponse<Unit?> = handleErrorResponse {
         apiService.createOrUpdateWalkScore(walkScore = WalkScore(username = getUser()!!.username, walkId = walkId, score = newScore))

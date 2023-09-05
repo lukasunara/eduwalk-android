@@ -227,7 +227,7 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
                 isCompassEnabled = true
                 isMapToolbarEnabled = false
             }
-            setOnMarkerClickListener(::onMarkerClick)
+            setOnMarkerClickListener(this@WalkFragment)
         }
     }
 
@@ -247,6 +247,8 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
 
     private fun updateLocations(locationsWithScores: List<LocationWithScore>) {
         val googleMap = googleMap ?: return
+
+        markers.forEach { it.remove() }.also { markers.clear() }
 
         locationsWithScores.forEach { locationWithScore ->
             val marker = googleMap.addMarker(

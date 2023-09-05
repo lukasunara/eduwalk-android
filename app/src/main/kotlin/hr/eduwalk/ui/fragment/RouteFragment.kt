@@ -14,7 +14,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
+import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptor
@@ -33,13 +35,19 @@ import hr.eduwalk.ui.viewmodel.RouteViewModel
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RouteFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnMapReadyCallback, OnMarkerClickListener {
+class RouteFragment :
+    BaseFragment(contentLayoutId = R.layout.fragment_walk),
+    OnMapReadyCallback,
+    OnMapLoadedCallback,
+    OnMarkerClickListener,
+    OnMarkerDragListener {
 
     override val viewModel: RouteViewModel by viewModels()
 
     private val args: WalkFragmentArgs by navArgs()
 
     private var isCollecting = false
+    private var areMarkersEnabled = false
     private var binding: FragmentWalkBinding? = null
     private var googleMap: GoogleMap? = null
     private var markers = mutableListOf<Marker>()
@@ -165,6 +173,8 @@ class RouteFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), On
         }
     }
 
+    override fun onMapLoaded() = viewModel.onMapLoaded()
+
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap.apply {
             setMinZoomPreference(MIN_ZOOM)
@@ -173,31 +183,53 @@ class RouteFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), On
                 isCompassEnabled = true
                 isMapToolbarEnabled = false
             }
-            setOnMarkerClickListener(::onMarkerClick)
+            setOnMarkerClickListener(this@RouteFragment)
+            setOnMarkerDragListener(this@RouteFragment)
+            setOnMapLoadedCallback(this@RouteFragment)
         }
-        viewModel.onMapReady()
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
+        if (!areMarkersEnabled) return true
+
         val positionLatLng = LatLng(marker.position.latitude, marker.position.longitude)
         googleMap?.apply {
             animateCamera(CameraUpdateFactory.newLatLng(positionLatLng))
         }
-
         val location = marker.tag as Location
 
-//        if (enabledLocationIds.contains(locationWithScore.location.id)) {
 //            navController.navigate(WalkFragmentDirections.showLocationBottomSheet(locationWithScore))
-//        }
+
         return true
+    }
+
+    override fun onMarkerDrag(marker: Marker) {} // no-op
+
+    override fun onMarkerDragEnd(marker: Marker) {
+        val location = marker.tag as Location
+
+        viewModel.onMarkerDragged(
+            oldLocation = location,
+            newLatitude = marker.position.latitude,
+            newLongitude = marker.position.longitude,
+        )
+    }
+
+    override fun onMarkerDragStart(marker: Marker) {
+        areMarkersEnabled = false
     }
 
     private fun updateLocations(locations: List<Location>) {
         val googleMap = googleMap ?: return
 
+        markers.forEach { it.remove() }.also { markers.clear() }
+
         locations.forEach { location ->
             val marker = googleMap.addMarker(
-                MarkerOptions().position(LatLng(location.latitude, location.longitude)).icon(markerIcon)
+                MarkerOptions()
+                    .position(LatLng(location.latitude, location.longitude))
+                    .icon(markerIcon)
+                    .draggable(true)
             )?.apply { tag = location }
 
             marker?.let { markers.add(it) }
@@ -214,6 +246,8 @@ class RouteFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), On
         val bounds = LatLngBounds(swBounds, neBounds)
         googleMap.setLatLngBoundsForCameraTarget(bounds)
         googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0))
+
+        areMarkersEnabled = true
     }
 
     private fun showAlertDialog() {

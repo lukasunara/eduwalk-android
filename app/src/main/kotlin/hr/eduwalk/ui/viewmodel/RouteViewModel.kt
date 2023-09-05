@@ -2,6 +2,7 @@ package hr.eduwalk.ui.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hr.eduwalk.data.model.Location
 import hr.eduwalk.data.model.Walk
 import hr.eduwalk.networking.EduWalkRepository
 import hr.eduwalk.ui.event.RouteEvent
@@ -67,9 +68,21 @@ class RouteViewModel @Inject constructor(
         uiStateFlow.update { it.copy(walk = walk) }
     }
 
-    fun onMapReady() {
+    fun onMapLoaded() {
+        viewModelScope.launch { showUpdatedLocations() }
+    }
+
+    fun onMarkerDragged(oldLocation: Location, newLatitude: Double, newLongitude: Double) {
         viewModelScope.launch {
-            eventsFlow.emit(value = RouteEvent.ShowLocations(locations = uiStateFlow.value.locations))
+            val newLocation = oldLocation.copy(latitude = newLatitude, longitude = newLongitude)
+
+            handleErrorResponse(response = eduWalkRepository.updateLocation(location = newLocation)) ?: return@launch
+
+            uiStateFlow.value.locations.apply {
+                remove(oldLocation)
+                add(newLocation)
+            }
+            showUpdatedLocations()
         }
     }
 
@@ -83,5 +96,9 @@ class RouteViewModel @Inject constructor(
 
             uiStateFlow.update { it.copy(locations = locations) }
         }
+    }
+
+    private suspend fun showUpdatedLocations() {
+        eventsFlow.emit(value = RouteEvent.ShowLocations(locations = uiStateFlow.value.locations))
     }
 }

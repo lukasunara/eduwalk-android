@@ -1,5 +1,6 @@
 package hr.eduwalk.networking
 
+import hr.eduwalk.data.model.Location
 import hr.eduwalk.data.model.User
 import hr.eduwalk.data.model.Walk
 import hr.eduwalk.data.model.WalkScore
@@ -70,4 +71,7 @@ interface EduWalkApiService {
     /* --- Location --- */
     @GET("location/{walkId}")
     suspend fun getWalkLocations(@Path("walkId") walkId: String): WalkLocationsResponse
+
+    @POST("location/{locationId}/update")
+    suspend fun updateLocation(@Path("locationId") locationId: Int, @Body location: Location): EmptyResponse
 }
