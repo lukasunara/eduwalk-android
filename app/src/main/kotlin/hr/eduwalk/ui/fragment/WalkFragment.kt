@@ -203,7 +203,7 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
                             currentUserUsername = event.currentUserUsername,
                         ).show()
                     }
-                    null -> {} // no-op
+                    else -> {} // no-op
                 }
                 viewModel.onEventConsumed()
             }

@@ -1,5 +1,6 @@
 package hr.eduwalk.networking.model
 
+import hr.eduwalk.data.model.Location
 import hr.eduwalk.data.model.LocationWithScore
 import hr.eduwalk.data.model.Question
 import hr.eduwalk.data.model.User
@@ -47,16 +48,16 @@ data class LocationsWithScoresResponse(
 
 @Serializable
 data class WalkScoreTop5Response(
-    val walkScores: List<WalkScore>? = null,
-    val error: ResponseError? = null,
+    @SerialName("walkScores") val walkScores: List<WalkScore>? = null,
+    @SerialName("error") val error: ResponseError? = null,
 )
 
-//@Serializable
-//data class WalkLocationsResponse(
-//    val locations: List<Location>? = null,
-//    val error: ResponseError? = null,
-//)
-//
+@Serializable
+data class WalkLocationsResponse(
+    @SerialName("locations") val locations: List<Location>? = null,
+    @SerialName("error") val error: ResponseError? = null,
+)
+
 @Serializable
 data class WalkResponse(
     @SerialName("walk") val walk: Walk? = null,

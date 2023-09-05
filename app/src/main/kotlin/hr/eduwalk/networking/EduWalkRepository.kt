@@ -1,6 +1,7 @@
 package hr.eduwalk.networking
 
 import com.google.gson.Gson
+import hr.eduwalk.data.model.Location
 import hr.eduwalk.data.model.LocationWithScore
 import hr.eduwalk.data.model.Question
 import hr.eduwalk.data.model.User
@@ -14,6 +15,7 @@ import hr.eduwalk.networking.model.UpdateWalkRequestBody
 import hr.eduwalk.networking.model.toApiResponse
 import javax.inject.Inject
 import retrofit2.HttpException
+import retrofit2.http.Path
 
 class EduWalkRepository @Inject constructor(
     private val apiService: EduWalkApiService,
@@ -50,6 +52,10 @@ class EduWalkRepository @Inject constructor(
         apiService.createWalk(walk = walk)
     }.toApiResponse()
 
+    suspend fun deleteWalk(@Path("walkId") walkId: String): ApiResponse<Unit?> = handleErrorResponse {
+        apiService.deleteWalk(walkId = walkId)
+    }.toApiResponse()
+
     suspend fun updateWalkInfo(walkId: String, walkTitle: String, walkDescription: String?): ApiResponse<Unit?> = handleErrorResponse {
         apiService.updateWalkInfo(
             walkId = walkId,
@@ -71,6 +77,10 @@ class EduWalkRepository @Inject constructor(
     /* --- Location --- */
     suspend fun getLocationsWithScores(walkId: String): ApiResponse<List<LocationWithScore>?> = handleErrorResponse {
         apiService.getLocationsWithScores(walkId = walkId, username = getUser()!!.username)
+    }.toApiResponse()
+
+    suspend fun getWalkLocations(walkId: String): ApiResponse<List<Location>?> = handleErrorResponse {
+        apiService.getWalkLocations(walkId = walkId)
     }.toApiResponse()
 
     /* --- WalkScore --- */

@@ -66,4 +66,9 @@
     <!-- My Walks -->
     <string name="choose_my_walk">Pregledaj i uredi jednu od svojih ruta</string>
 
+    <!-- Route -->
+    <string name="do_you_want_to_delete_route">Želiš li stvarno obrisati ovu rutu?</string>
+    <string name="no">Ne</string>
+    <string name="yes">Da</string>
+
 </resources>

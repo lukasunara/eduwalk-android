@@ -9,11 +9,13 @@ import hr.eduwalk.networking.model.LocationsWithScoresResponse
 import hr.eduwalk.networking.model.UpdateLocationScoreBody
 import hr.eduwalk.networking.model.UpdateWalkRequestBody
 import hr.eduwalk.networking.model.UserResponse
+import hr.eduwalk.networking.model.WalkLocationsResponse
 import hr.eduwalk.networking.model.WalkResponse
 import hr.eduwalk.networking.model.WalkScoreTop5Response
 import hr.eduwalk.networking.model.WalksResponse
 import hr.eduwalk.networking.model.WalksWithScoresResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -28,6 +30,7 @@ interface EduWalkApiService {
     @GET("/walk/{walkId}")
     suspend fun getWalk(@Path("walkId") walkId: String): WalkResponse
 
+    /* --- Walk --- */
     @GET("/walk/getDefaultWalks")
     suspend fun getDefaultWalks(): WalksResponse
 
@@ -37,12 +40,14 @@ interface EduWalkApiService {
     @GET("join/getWalksWithScores")
     suspend fun getWalksWithScores(@Query("username") username: String): WalksWithScoresResponse
 
-    /* --- Walk --- */
     @GET("join/getLocationsWithScores")
     suspend fun getLocationsWithScores(@Query("walkId") walkId: String, @Query("username") username: String): LocationsWithScoresResponse
 
     @POST("walk/create")
     suspend fun createWalk(@Body walk: Walk): EmptyResponse
+
+    @DELETE("walk/{walkId}")
+    suspend fun deleteWalk(@Path("walkId") walkId: String): EmptyResponse
 
     @POST("walk/{walkId}/update")
     suspend fun updateWalkInfo(@Path("walkId") walkId: String, @Body updateWalkRequestBody: UpdateWalkRequestBody): EmptyResponse
@@ -61,4 +66,8 @@ interface EduWalkApiService {
     /* --- LocationScore --- */
     @POST("/locationScore/createOrUpdate")
     suspend fun updateLocationScore(@Body locationScoreBody: UpdateLocationScoreBody): EmptyResponse
+
+    /* --- Location --- */
+    @GET("location/{walkId}")
+    suspend fun getWalkLocations(@Path("walkId") walkId: String): WalkLocationsResponse
 }

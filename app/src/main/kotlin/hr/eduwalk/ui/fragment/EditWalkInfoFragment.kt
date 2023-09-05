@@ -6,6 +6,8 @@ import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
@@ -71,10 +73,12 @@ class EditWalkInfoFragment : BaseFragment(contentLayoutId = R.layout.fragment_ed
             viewModel.eventsFlow.collect { event ->
                 when (event) {
                     is EditWalkEvent.FinishCreatingWalk -> {
-                        // TODO navController.navigate(directions = LoginFragmentDirections.navigateToHomeFragment())
+                        navController.navigate(directions = EditWalkInfoFragmentDirections.navigateToRouteFragment(walk = event.walk))
                     }
                     is EditWalkEvent.FinishEditingWalkInfo -> {
-                        // TODO navController.navigate(directions = LoginFragmentDirections.navigateToHomeFragment())
+                        val bundle = bundleOf("walk" to event.walk)
+                        setFragmentResult("editWalkInfoFragmentResult", bundle)
+                        navController.navigateUp()
                     }
                     is EditWalkEvent.SetupWalkId -> binding?.walkIdLabel?.text = getString(R.string.walk_id, event.walkId)
                     null -> {} // no-op
