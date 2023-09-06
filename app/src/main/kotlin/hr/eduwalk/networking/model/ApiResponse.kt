@@ -15,6 +15,11 @@ fun UserResponse.toApiResponse() = when (error) {
     else -> ApiResponse.Error(errorMessage = error.toString())
 }
 
+fun LocationResponse.toApiResponse() = when (error) {
+    null -> ApiResponse.Success(data = location)
+    else -> ApiResponse.Error(errorMessage = error.toString())
+}
+
 fun LocationQuestionsResponse.toApiResponse() = when (error) {
     null -> ApiResponse.Success(data = questions)
     else -> ApiResponse.Error(errorMessage = error.toString())

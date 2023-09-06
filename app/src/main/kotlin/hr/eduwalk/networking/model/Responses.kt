@@ -23,6 +23,12 @@ data class UserResponse(
 )
 
 @Serializable
+data class LocationResponse(
+    @SerialName("location") val location: Location? = null,
+    @SerialName("error") val error: ResponseError? = null,
+)
+
+@Serializable
 data class LocationQuestionsResponse(
     @SerialName("questions") val questions: List<Question>? = null,
     @SerialName("error") val error: ResponseError? = null,

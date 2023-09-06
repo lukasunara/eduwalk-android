@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="home_button_height">96dp</dimen>
+    <dimen name="image_height">200dp</dimen>
     <dimen name="dialog_illustration_width">350dp</dimen>
 </resources>

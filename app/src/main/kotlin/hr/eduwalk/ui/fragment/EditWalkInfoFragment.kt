@@ -64,6 +64,7 @@ class EditWalkInfoFragment : BaseFragment(contentLayoutId = R.layout.fragment_ed
                     editWalkButton.isEnabled = s?.isNotBlank() ?: false
                 }
             })
+            toolbar.backButton.setOnClickListener { mainActivity.onBackPressed() }
         }
     }
 

@@ -6,6 +6,7 @@ import hr.eduwalk.data.model.Walk
 import hr.eduwalk.data.model.WalkScore
 import hr.eduwalk.networking.model.EmptyResponse
 import hr.eduwalk.networking.model.LocationQuestionsResponse
+import hr.eduwalk.networking.model.LocationResponse
 import hr.eduwalk.networking.model.LocationsWithScoresResponse
 import hr.eduwalk.networking.model.UpdateLocationScoreBody
 import hr.eduwalk.networking.model.UpdateWalkRequestBody
@@ -72,6 +73,12 @@ interface EduWalkApiService {
     @GET("location/{walkId}")
     suspend fun getWalkLocations(@Path("walkId") walkId: String): WalkLocationsResponse
 
+    @POST("location/create")
+    fun createLocation(@Body location: Location): LocationResponse
+
     @POST("location/{locationId}/update")
     suspend fun updateLocation(@Path("locationId") locationId: Int, @Body location: Location): EmptyResponse
+
+    @DELETE("location/{locationId}")
+    suspend fun deleteLocation(@Path("locationId") locationId: Int): EmptyResponse
 }

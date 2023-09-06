@@ -71,4 +71,15 @@
     <string name="no">Ne</string>
     <string name="yes">Da</string>
 
+    <!-- Create/Edit Location -->
+    <string name="create_location">Stvori lokaciju</string>
+    <string name="do_you_want_to_delete_location">Želiš li stvarno obrisati ovu lokaciju?</string>
+    <string name="edit_location_description_hint_text">Opis i informacije o lokaciji</string>
+    <string name="edit_location_do_you_want_to_exit">Ako napustiš ekran, neće se zapamtiti posljednje promjene!</string>
+    <string name="edit_location_title_helper_text">Najviše 200 znakova</string>
+    <string name="edit_location_title_hint_text">Naziv lokacije</string>
+    <string name="edit_location_threshold_text">Min. udaljenost od lokacije: %d metara</string>
+    <string name="edit_location_threshold_helper_text">Mora biti cijeli broj</string>
+    <string name="edit_location_questions">Upravljaj pitanjima</string>
+
 </resources>

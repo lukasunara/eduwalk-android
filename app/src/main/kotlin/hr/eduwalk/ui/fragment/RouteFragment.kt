@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.isVisible
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener
 import com.google.android.gms.maps.MapView
@@ -28,7 +28,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import dagger.hilt.android.AndroidEntryPoint
 import hr.eduwalk.R
 import hr.eduwalk.data.model.Location
-import hr.eduwalk.data.model.Walk
 import hr.eduwalk.databinding.FragmentWalkBinding
 import hr.eduwalk.ui.event.RouteEvent
 import hr.eduwalk.ui.viewmodel.RouteViewModel
@@ -39,6 +38,7 @@ class RouteFragment :
     BaseFragment(contentLayoutId = R.layout.fragment_walk),
     OnMapReadyCallback,
     OnMapLoadedCallback,
+    OnMapLongClickListener,
     OnMarkerClickListener,
     OnMarkerDragListener {
 
@@ -132,10 +132,6 @@ class RouteFragment :
 
     override fun setupListeners() {
         super.setupListeners()
-        setFragmentResultListener("editWalkInfoFragmentResult") { _, result ->
-            val walk = result.getParcelable<Walk>("walk")!!
-            viewModel.onNewWalkInfoReceived(walk = walk)
-        }
         binding?.apply {
             toolbar.apply {
                 backButton.setOnClickListener { navController.popBackStack() }
@@ -173,8 +169,6 @@ class RouteFragment :
         }
     }
 
-    override fun onMapLoaded() = viewModel.onMapLoaded()
-
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap.apply {
             setMinZoomPreference(MIN_ZOOM)
@@ -189,6 +183,22 @@ class RouteFragment :
         }
     }
 
+    override fun onMapLoaded() = viewModel.onMapLoaded()
+
+    override fun onMapLongClick(latLng: LatLng) {
+        val location = Location(
+            id = -1,
+            latitude = latLng.latitude,
+            longitude = latLng.longitude,
+            title = "",
+            description = null,
+            imageBase64 = null,
+            thresholdDistance = 20,
+            walkId = args.walk.id,
+        )
+        navController.navigate(directions = RouteFragmentDirections.navigateToEditLocationInfoFragment(location = location))
+    }
+
     override fun onMarkerClick(marker: Marker): Boolean {
         if (!areMarkersEnabled) return true
 
@@ -198,7 +208,7 @@ class RouteFragment :
         }
         val location = marker.tag as Location
 
-//            navController.navigate(WalkFragmentDirections.showLocationBottomSheet(locationWithScore))
+        navController.navigate(directions = RouteFragmentDirections.navigateToEditLocationInfoFragment(location = location))
 
         return true
     }

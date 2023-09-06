@@ -136,6 +136,10 @@
         <action
             android:id="@+id/navigate_to_edit_walk_info_fragment"
             app:destination="@id/fragment_edit_walk_info" />
+
+        <action
+            android:id="@+id/navigate_to_edit_location_info_fragment"
+            app:destination="@id/fragment_edit_location_info" />
     </fragment>
 
     <fragment
@@ -148,6 +152,16 @@
             android:defaultValue="@null"
             app:argType="hr.eduwalk.data.model.Walk"
             app:nullable="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_edit_location_info"
+        android:name="hr.eduwalk.ui.fragment.EditLocationInfoFragment"
+        tools:layout="@layout/fragment_edit_location_info">
+
+        <argument
+            android:name="location"
+            app:argType="hr.eduwalk.data.model.Location" />
     </fragment>
 
     <dialog

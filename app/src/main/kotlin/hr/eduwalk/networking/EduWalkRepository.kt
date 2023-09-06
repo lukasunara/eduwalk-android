@@ -83,8 +83,16 @@ class EduWalkRepository @Inject constructor(
         apiService.getWalkLocations(walkId = walkId)
     }.toApiResponse()
 
+    fun createLocation(location: Location): ApiResponse<Location?> = handleErrorResponse {
+        apiService.createLocation(location = location)
+    }.toApiResponse()
+
     suspend fun updateLocation(location: Location): ApiResponse<Unit?> = handleErrorResponse {
         apiService.updateLocation(locationId = location.id, location = location)
+    }.toApiResponse()
+
+    suspend fun deleteLocation(locationId: Int): ApiResponse<Unit?> = handleErrorResponse {
+        apiService.deleteLocation(locationId = locationId)
     }.toApiResponse()
 
     /* --- WalkScore --- */
