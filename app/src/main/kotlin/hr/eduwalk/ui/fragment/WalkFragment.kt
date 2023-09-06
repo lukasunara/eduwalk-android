@@ -64,7 +64,7 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
     private var binding: FragmentWalkBinding? = null
     private var googleMap: GoogleMap? = null
     private var markers = mutableListOf<Marker>()
-    private var enabledLocationIds = mutableListOf<Int>()
+    private var enabledLocationIds = mutableListOf<Long>()
 
     private lateinit var mapView: MapView
 
@@ -174,7 +174,7 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
         super.setupListeners()
         setFragmentResultListener("quizFragmentResult") { _, result ->
             val newScore = result.getInt("newScore")
-            val locationId = result.getInt("locationId")
+            val locationId = result.getLong("locationId")
             viewModel.onNewLocationScoreReceived(locationId = locationId, newLocationScore = newScore)
         }
         binding?.apply {

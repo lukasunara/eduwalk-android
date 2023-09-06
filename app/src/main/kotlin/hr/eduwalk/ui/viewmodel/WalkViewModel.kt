@@ -41,7 +41,7 @@ class WalkViewModel @Inject constructor(
         }
     }
 
-    fun onNewLocationScoreReceived(locationId: Int, newLocationScore: Int) {
+    fun onNewLocationScoreReceived(locationId: Long, newLocationScore: Int) {
         val oldLocationScore = locationsWithScores.first { it.location.id == locationId }.score
         if (oldLocationScore == null || newLocationScore > oldLocationScore) {
             viewModelScope.launch {

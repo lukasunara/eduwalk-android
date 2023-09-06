@@ -177,6 +177,7 @@ class RouteFragment :
                 isCompassEnabled = true
                 isMapToolbarEnabled = false
             }
+            setOnMapLongClickListener(this@RouteFragment)
             setOnMarkerClickListener(this@RouteFragment)
             setOnMarkerDragListener(this@RouteFragment)
             setOnMapLoadedCallback(this@RouteFragment)

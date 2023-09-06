@@ -36,7 +36,7 @@ class EditLocationViewModel @Inject constructor(
 
         viewModelScope.launch {
             when (newLocation.id) {
-                -1 -> {
+                -1L -> {
                     val location = handleErrorResponse(
                         response = eduWalkRepository.createLocation(location = newLocation),
                     ) ?: return@launch

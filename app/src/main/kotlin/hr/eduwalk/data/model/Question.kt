@@ -5,9 +5,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Question(
-    @SerialName("id") val id: Int,
+    @SerialName("id") val id: Long,
     @SerialName("questionText") val questionText: String,
     @SerialName("answers") val answers: List<String>,
     @SerialName("correctAnswer") val correctAnswer: String,
-    @SerialName("locationId") val locationId: Int,
+    @SerialName("locationId") val locationId: Long,
 )

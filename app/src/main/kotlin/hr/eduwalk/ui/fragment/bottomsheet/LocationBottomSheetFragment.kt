@@ -42,9 +42,9 @@ class LocationBottomSheetFragment : BaseBottomSheetFragment(contentLayoutId = R.
                 with(args.locationWithScore) {
                     navController.navigate(
                         directions = LocationBottomSheetFragmentDirections.navigateToQuizFragment(
-                            location.id,
-                            location.title,
-                            bestScore ?: -1
+                            locationId = location.id,
+                            locationTitle = location.title,
+                            currentScore = bestScore ?: -1,
                         )
                     )
                 }

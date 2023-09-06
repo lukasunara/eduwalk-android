@@ -83,7 +83,7 @@ class EduWalkRepository @Inject constructor(
         apiService.getWalkLocations(walkId = walkId)
     }.toApiResponse()
 
-    fun createLocation(location: Location): ApiResponse<Location?> = handleErrorResponse {
+    suspend fun createLocation(location: Location): ApiResponse<Location?> = handleErrorResponse {
         apiService.createLocation(location = location)
     }.toApiResponse()
 
@@ -91,7 +91,7 @@ class EduWalkRepository @Inject constructor(
         apiService.updateLocation(locationId = location.id, location = location)
     }.toApiResponse()
 
-    suspend fun deleteLocation(locationId: Int): ApiResponse<Unit?> = handleErrorResponse {
+    suspend fun deleteLocation(locationId: Long): ApiResponse<Unit?> = handleErrorResponse {
         apiService.deleteLocation(locationId = locationId)
     }.toApiResponse()
 
@@ -105,12 +105,12 @@ class EduWalkRepository @Inject constructor(
     }.toApiResponse()
 
     /* --- Question --- */
-    suspend fun getLocationQuestions(locationId: Int): ApiResponse<List<Question>?> = handleErrorResponse {
+    suspend fun getLocationQuestions(locationId: Long): ApiResponse<List<Question>?> = handleErrorResponse {
         apiService.getLocationQuestions(locationId = locationId)
     }.toApiResponse()
 
     /* --- LocationScore --- */
-    suspend fun updateLocationScore(locationId: Int, newBestScore: Int): ApiResponse<Unit?> = handleErrorResponse {
+    suspend fun updateLocationScore(locationId: Long, newBestScore: Int): ApiResponse<Unit?> = handleErrorResponse {
         apiService.updateLocationScore(
             locationScoreBody = UpdateLocationScoreBody(
                 userId = getUser()!!.username,

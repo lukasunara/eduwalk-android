@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 @Parcelize
 @Serializable
 data class Location(
-    @SerialName("id") val id: Int,
+    @SerialName("id") val id: Long,
     @SerialName("latitude") val latitude: Double,
     @SerialName("longitude") val longitude: Double,
     @SerialName("title") val title: String,

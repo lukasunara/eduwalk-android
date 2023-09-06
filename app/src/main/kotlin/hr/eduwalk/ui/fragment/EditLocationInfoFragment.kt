@@ -10,9 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
@@ -136,8 +134,8 @@ class EditLocationInfoFragment : BaseFragment(contentLayoutId = R.layout.fragmen
             viewModel.eventsFlow.collect { event ->
                 when (event) {
                     is EditLocationEvent.FinishDeleteLocation -> {
-                        val bundle = bundleOf("locationId" to event.locationId)
-                        setFragmentResult("deleteLocationFragmentResult", bundle)
+//                        val bundle = bundleOf("locationId" to event.locationId)
+//                        setFragmentResult("deleteLocationFragmentResult", bundle)
                         navController.navigateUp()
                     }
                     null -> {} // no-op
@@ -165,22 +163,20 @@ class EditLocationInfoFragment : BaseFragment(contentLayoutId = R.layout.fragmen
                         addLocationImage.isVisible = true
                     }
 
-                    val editLocationButtonTextResId = if (location.id == -1) R.string.create_location else R.string.save_changes
+                    val editLocationButtonTextResId = if (location.id == -1L) R.string.create_location else R.string.save_changes
                     editLocationButton.apply {
                         text = getString(editLocationButtonTextResId)
                         isEnabled = false
                     }
-                    addQuestionsButton.isEnabled = location.id != -1
+                    addQuestionsButton.isEnabled = location.id != -1L
+                    toolbar.buttonOption2.isVisible = location.id != -1L
                 }
             }
         }
     }
 
     override fun setupUi() {
-        binding?.toolbar?.buttonOption2?.apply {
-            setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_delete))
-            isVisible = true
-        }
+        binding?.toolbar?.buttonOption2?.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_delete))
     }
 
     private fun showDeleteAlertDialog() {

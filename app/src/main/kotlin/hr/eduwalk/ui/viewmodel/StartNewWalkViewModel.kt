@@ -16,9 +16,7 @@ class StartNewWalkViewModel @Inject constructor(
     override val uiStateFlow = MutableStateFlow(value = Unit)
     override val eventsFlow = MutableStateFlow<StartNewWalkEvent?>(value = null)
 
-    fun start() {
-        getDefaultWalks()
-    }
+    fun start() = getDefaultWalks()
 
     fun onStartWalkClicked(walkId: String) {
         viewModelScope.launch {

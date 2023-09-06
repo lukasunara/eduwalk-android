@@ -12,6 +12,6 @@ data class UpdateWalkRequestBody(
 @Serializable
 data class UpdateLocationScoreBody(
     @SerialName("userId") val userId: String,
-    @SerialName("locationId") val locationId: Int,
+    @SerialName("locationId") val locationId: Long,
     @SerialName("score") val score: Int?,
 )

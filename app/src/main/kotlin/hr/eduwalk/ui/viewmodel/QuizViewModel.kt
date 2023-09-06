@@ -23,10 +23,10 @@ class QuizViewModel @Inject constructor(
     private var questions: List<Question>? = null
     private var correctAnswers = 0
 
-    private var locationId: Int by Delegates.notNull()
+    private var locationId: Long by Delegates.notNull()
     private var currentScore: Int by Delegates.notNull()
 
-    fun start(locationId: Int, currentScore: Int) {
+    fun start(locationId: Long, currentScore: Int) {
         this.locationId = locationId
         this.currentScore = currentScore
         getQuestions()

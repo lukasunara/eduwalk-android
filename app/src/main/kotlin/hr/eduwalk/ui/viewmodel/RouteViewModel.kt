@@ -25,26 +25,6 @@ class RouteViewModel @Inject constructor(
         getWalkLocations()
     }
 
-//    fun onNewLocationScoreReceived(locationId: Int, newLocationScore: Int) {
-//        val oldLocationScore = locations.first { it.location.id == locationId }.score
-//        if (oldLocationScore == null || newLocationScore > oldLocationScore) {
-//            viewModelScope.launch {
-//                locations.forEach {
-//                    if (it.location.id == locationId) {
-//                        it.score = newLocationScore
-//                    }
-//                }
-//                updateWalkScore()
-//                handleErrorResponse(
-//                    response = eduWalkRepository.createOrUpdateWalkScore(
-//                        walkId = walkId,
-//                        newScore = locations.sumOf { it.score ?: 0 },
-//                    ),
-//                ) ?: return@launch
-//            }
-//        }
-//    }
-
     fun onDestroyView() {
         uiStateFlow.value = RouteUiState()
     }

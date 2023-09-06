@@ -63,7 +63,7 @@ interface EduWalkApiService {
 
     /* --- Question --- */
     @GET("/question/{locationId}")
-    suspend fun getLocationQuestions(@Path("locationId") locationId: Int): LocationQuestionsResponse
+    suspend fun getLocationQuestions(@Path("locationId") locationId: Long): LocationQuestionsResponse
 
     /* --- LocationScore --- */
     @POST("/locationScore/createOrUpdate")
@@ -74,11 +74,11 @@ interface EduWalkApiService {
     suspend fun getWalkLocations(@Path("walkId") walkId: String): WalkLocationsResponse
 
     @POST("location/create")
-    fun createLocation(@Body location: Location): LocationResponse
+    suspend fun createLocation(@Body location: Location): LocationResponse
 
     @POST("location/{locationId}/update")
-    suspend fun updateLocation(@Path("locationId") locationId: Int, @Body location: Location): EmptyResponse
+    suspend fun updateLocation(@Path("locationId") locationId: Long, @Body location: Location): EmptyResponse
 
     @DELETE("location/{locationId}")
-    suspend fun deleteLocation(@Path("locationId") locationId: Int): EmptyResponse
+    suspend fun deleteLocation(@Path("locationId") locationId: Long): EmptyResponse
 }
