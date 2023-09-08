@@ -59,7 +59,11 @@ class EditLocationViewModel @Inject constructor(
     }
 
     fun onAddQuestionClicked(locationTitle: String, locationDescription: String, imageBase64: Nothing?, thresholdDistance: Int) {
+        val location = uiStateFlow.value.location ?: return
+
         onEditLocationClicked(locationTitle, locationDescription, imageBase64, thresholdDistance)
-        // TODO
+        viewModelScope.launch {
+            eventsFlow.emit(value = EditLocationEvent.NavigateToAddQuestions(locationId = location.id, locationTitle = locationTitle))
+        }
     }
 }

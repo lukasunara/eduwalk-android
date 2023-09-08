@@ -82,4 +82,9 @@
     <string name="edit_location_threshold_helper_text">Mora biti cijeli broj</string>
     <string name="edit_location_questions">Upravljaj pitanjima</string>
 
+    <!-- Add Questions -->
+    <string name="add_question">Dodaj pitanje</string>
+    <string name="do_you_want_to_delete_question">Želiš li stvarno obrisati ovo pitanje?</string>
+    <string name="no_questions_yet">Ne postoji nijedno pitanje vezano uz ovu lokaciju!</string>
+
 </resources>

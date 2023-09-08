@@ -21,7 +21,7 @@ private object StringDiffCallback : DiffUtil.ItemCallback<String>() {
 }
 
 class AnswersAdapter(
-    private val onAnswerSelected: (isCorrect: Boolean) -> Unit,
+    private val onAnswerSelected: (isCorrect: Boolean) -> Unit = {},
 ) : ListAdapter<String, AnswersAdapter.AnswerViewHolder>(StringDiffCallback) {
 
     private val LETTERS_MAP = mapOf(0 to "a)", 1 to "b)", 2 to "c)", 3 to "d)", 4 to "e)")

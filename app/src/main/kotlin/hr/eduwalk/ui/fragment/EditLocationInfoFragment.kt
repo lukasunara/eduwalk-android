@@ -138,6 +138,14 @@ class EditLocationInfoFragment : BaseFragment(contentLayoutId = R.layout.fragmen
 //                        setFragmentResult("deleteLocationFragmentResult", bundle)
                         navController.navigateUp()
                     }
+                    is EditLocationEvent.NavigateToAddQuestions -> {
+                        navController.navigate(
+                            directions = EditLocationInfoFragmentDirections.navigateToAddQuestionsFragment(
+                                locationId = event.locationId,
+                                locationTitle = event.locationTitle,
+                            )
+                        )
+                    }
                     null -> {} // no-op
                 }
                 viewModel.onEventConsumed()

@@ -109,6 +109,10 @@ class EduWalkRepository @Inject constructor(
         apiService.getLocationQuestions(locationId = locationId)
     }.toApiResponse()
 
+    suspend fun deleteQuestion(questionId: Long): ApiResponse<Unit?> = handleErrorResponse {
+        apiService.deleteQuestion(questionId = questionId)
+    }.toApiResponse()
+
     /* --- LocationScore --- */
     suspend fun updateLocationScore(locationId: Long, newBestScore: Int): ApiResponse<Unit?> = handleErrorResponse {
         apiService.updateLocationScore(

@@ -162,6 +162,24 @@
         <argument
             android:name="location"
             app:argType="hr.eduwalk.data.model.Location" />
+
+        <action
+            android:id="@+id/navigate_to_add_questions_fragment"
+            app:destination="@id/fragment_add_questions" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_add_questions"
+        android:name="hr.eduwalk.ui.fragment.AddQuestionsFragment"
+        tools:layout="@layout/fragment_add_questions">
+
+        <argument
+            android:name="locationId"
+            app:argType="long" />
+
+        <argument
+            android:name="locationTitle"
+            app:argType="string" />
     </fragment>
 
     <dialog
