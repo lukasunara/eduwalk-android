@@ -180,6 +180,20 @@
         <argument
             android:name="locationTitle"
             app:argType="string" />
+
+        <action
+            android:id="@+id/navigate_to_edit_question"
+            app:destination="@id/fragment_edit_question" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_edit_question"
+        android:name="hr.eduwalk.ui.fragment.EditQuestionFragment"
+        tools:layout="@layout/fragment_edit_question">
+
+        <argument
+            android:name="question"
+            app:argType="hr.eduwalk.data.model.Question" />
     </fragment>
 
     <dialog

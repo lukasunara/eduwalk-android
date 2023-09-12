@@ -56,7 +56,7 @@ class EditWalkInfoFragment : BaseFragment(contentLayoutId = R.layout.fragment_ed
             editWalkButton.setOnClickListener {
                 viewModel.onEditWalkClicked(
                     walkTitle = walkTitleEditText.text.toString(),
-                    walkDescription = walkDescriptionEditText.text.toString(),
+                    walkDescription = walkDescriptionEditText.text?.toString()?.takeIf { it.isNotBlank() },
                 )
             }
             walkTitleEditText.addTextChangedListener(object : DefaultTextWatcher {

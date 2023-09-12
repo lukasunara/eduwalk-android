@@ -87,4 +87,12 @@
     <string name="do_you_want_to_delete_question">Želiš li stvarno obrisati ovo pitanje?</string>
     <string name="no_questions_yet">Ne postoji nijedno pitanje vezano uz ovu lokaciju!</string>
 
+    <!-- Edit Question -->
+    <string name="create_question">Stvori pitanje</string>
+    <string name="correct_answer">Točan odgovor na pitanje</string>
+    <string name="given_answers">Ponuđeni odgovori:</string>
+    <string name="min_max_answers">(minimalno 2, maksimalno 5)</string>
+    <string name="possible_answer">Potencijalni odgovor na pitanje</string>
+    <string name="write_question_here">Ovdje napišite pitanje</string>
+
 </resources>

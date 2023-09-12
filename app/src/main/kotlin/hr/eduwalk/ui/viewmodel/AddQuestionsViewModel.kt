@@ -29,6 +29,10 @@ class AddQuestionsViewModel @Inject constructor(
         getQuestions()
     }
 
+    fun onDestroyView() {
+        uiStateFlow.value = AddQuestionsUiState()
+    }
+
     fun onNextQuestionClicked() {
         val questions = questions ?: return
         val questionIndex = uiStateFlow.value.questionIndex ?: return
@@ -39,7 +43,7 @@ class AddQuestionsViewModel @Inject constructor(
                 question = questions[questionIndex + 1],
                 questionIndex = questionIndex + 1,
                 isPrevButtonVisible = true,
-                isNextButtonVisible = questionIndex < questions.size - 1,
+                isNextButtonVisible = questionIndex + 1 < questions.size - 1,
             )
         }
     }
@@ -53,7 +57,7 @@ class AddQuestionsViewModel @Inject constructor(
             it.copy(
                 question = questions[questionIndex - 1],
                 questionIndex = questionIndex - 1,
-                isPrevButtonVisible = questionIndex > 0,
+                isPrevButtonVisible = questionIndex - 1 > 0,
                 isNextButtonVisible = true,
             )
         }
@@ -61,7 +65,7 @@ class AddQuestionsViewModel @Inject constructor(
 
     fun onEditQuestionClicked() {
         viewModelScope.launch {
-            eventsFlow.emit(value = AddQuestionsEvent.NavigateToEditQuestion(question = uiStateFlow.value.question))
+            eventsFlow.emit(value = AddQuestionsEvent.NavigateToEditQuestion(question = uiStateFlow.value.question!!))
         }
     }
 

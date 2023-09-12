@@ -69,3 +69,8 @@ fun WalksWithScoresResponse.toApiResponse() = when (error) {
     null -> ApiResponse.Success(data = walksWithScores)
     else -> ApiResponse.Error(errorMessage = error.toString())
 }
+
+fun QuestionResponse.toApiResponse() = when (error) {
+    null -> ApiResponse.Success(data = question)
+    else -> ApiResponse.Error(errorMessage = error.toString())
+}

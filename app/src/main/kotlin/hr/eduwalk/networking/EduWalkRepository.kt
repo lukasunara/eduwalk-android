@@ -109,6 +109,14 @@ class EduWalkRepository @Inject constructor(
         apiService.getLocationQuestions(locationId = locationId)
     }.toApiResponse()
 
+    suspend fun createQuestion(question: Question): ApiResponse<Question?> = handleErrorResponse {
+        apiService.createQuestion(question = question)
+    }.toApiResponse()
+
+    suspend fun updateQuestion(question: Question): ApiResponse<Unit?> = handleErrorResponse {
+        apiService.updateQuestion(questionId = question.id, question = question)
+    }.toApiResponse()
+
     suspend fun deleteQuestion(questionId: Long): ApiResponse<Unit?> = handleErrorResponse {
         apiService.deleteQuestion(questionId = questionId)
     }.toApiResponse()

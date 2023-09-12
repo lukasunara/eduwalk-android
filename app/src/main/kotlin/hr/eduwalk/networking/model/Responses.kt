@@ -87,3 +87,9 @@ data class WalksWithScoresResponse(
     @SerialName("walksWithScores") val walksWithScores: List<WalkWithScore>? = null,
     @SerialName("error") val error: ResponseError? = null,
 )
+
+@Serializable
+data class QuestionResponse(
+    @SerialName("question") val question: Question? = null,
+    @SerialName("error") val error: ResponseError? = null,
+)

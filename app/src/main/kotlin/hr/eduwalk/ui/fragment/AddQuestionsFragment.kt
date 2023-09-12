@@ -6,12 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import hr.eduwalk.R
+import hr.eduwalk.data.model.Question
 import hr.eduwalk.databinding.FragmentAddQuestionsBinding
 import hr.eduwalk.ui.adapter.AnswersAdapter
 import hr.eduwalk.ui.event.AddQuestionsEvent
@@ -26,6 +29,7 @@ class AddQuestionsFragment : BaseFragment(contentLayoutId = R.layout.fragment_ad
     private val args: AddQuestionsFragmentArgs by navArgs()
     private val answersAdapter = AnswersAdapter()
 
+    private var isCollecting = false
     private var binding: FragmentAddQuestionsBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -40,21 +44,43 @@ class AddQuestionsFragment : BaseFragment(contentLayoutId = R.layout.fragment_ad
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel.onDestroyView()
         binding = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        isCollecting = false
     }
 
     override fun setupListeners() {
         super.setupListeners()
+        setFragmentResultListener("editQuestionFragmentResult") { _, result ->
+            val newQuestion = result.getParcelable<Question>("newQuestion")
+            viewModel.start(locationId = args.locationId)
+        }
         binding?.apply {
             addQuestionButton.setOnClickListener {
-                // TODO navigate to create question
+                navController.navigate(
+                    directions = AddQuestionsFragmentDirections.navigateToEditQuestion(
+                        question = Question(
+                            id = -1,
+                            questionText = "",
+                            answers = listOf(),
+                            correctAnswer = "",
+                            locationId = args.locationId,
+                        ),
+                    )
+                )
             }
             previousQuestionButton.setOnClickListener {
                 it.isEnabled = false
+                nextQuestionButton.isEnabled = false
                 viewModel.onPreviousQuestionClicked()
             }
             nextQuestionButton.setOnClickListener {
                 it.isEnabled = false
+                previousQuestionButton.isEnabled = false
                 viewModel.onNextQuestionClicked()
             }
             toolbar.apply {
@@ -66,13 +92,15 @@ class AddQuestionsFragment : BaseFragment(contentLayoutId = R.layout.fragment_ad
     }
 
     override fun setupObservers() {
+        if (isCollecting) return
         super.setupObservers()
         lifecycleScope.launch {
+            isCollecting = true
             viewModel.eventsFlow.collect { event ->
                 when (event) {
-                    is AddQuestionsEvent.NavigateToEditQuestion -> {
-                        // TODO navigate to edit question
-                    }
+                    is AddQuestionsEvent.NavigateToEditQuestion -> navController.navigate(
+                        directions = AddQuestionsFragmentDirections.navigateToEditQuestion(question = event.question)
+                    )
                     null -> {} // no-op
                 }
                 viewModel.onEventConsumed()
@@ -81,29 +109,31 @@ class AddQuestionsFragment : BaseFragment(contentLayoutId = R.layout.fragment_ad
         lifecycleScope.launch {
             viewModel.uiStateFlow.collect { uiState ->
                 binding?.apply {
+                    val questionOkay = uiState.question?.let { it.id != -1L } ?: false
+
                     uiState.question?.let { question ->
                         questionText.text = question.questionText
                         answersAdapter.updateList(answers = question.answers, correctAnswer = question.correctAnswer)
                     }
                     toolbar.apply {
-                        buttonOption1.isVisible = uiState.question != null
-                        buttonOption2.isVisible = uiState.question != null
+                        buttonOption1.isVisible = questionOkay
+                        buttonOption2.isVisible = questionOkay
 
                         toolbarSubtitle.apply {
                             isVisible = uiState.questionIndex != null
                             text = getString(R.string.question_number, (uiState.questionIndex ?: 0) + 1)
                         }
                     }
-                    questionsContent.isVisible = uiState.isContentVisible && uiState.question != null
-                    noQuestionsLabel.isVisible = uiState.isContentVisible && uiState.question == null
+                    questionsContent.isVisible = uiState.isContentVisible && questionOkay
+                    noQuestionsLabel.isVisible = uiState.isContentVisible && !questionOkay
 
                     nextQuestionButton.apply {
                         isEnabled = true
-                        isVisible = uiState.isNextButtonVisible
+                        isInvisible = uiState.isNextButtonVisible.not()
                     }
                     previousQuestionButton.apply {
                         isEnabled = true
-                        isVisible = uiState.isPrevButtonVisible
+                        isInvisible = uiState.isPrevButtonVisible.not()
                     }
                 }
             }
@@ -117,14 +147,8 @@ class AddQuestionsFragment : BaseFragment(contentLayoutId = R.layout.fragment_ad
                     text = args.locationTitle
                     isVisible = true
                 }
-                buttonOption1.apply {
-                    isVisible = true
-                    setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_edit))
-                }
-                buttonOption2.apply {
-                    isVisible = true
-                    setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_delete))
-                }
+                buttonOption1.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_edit))
+                buttonOption2.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_delete))
             }
             answersRecycleView.adapter = answersAdapter
         }

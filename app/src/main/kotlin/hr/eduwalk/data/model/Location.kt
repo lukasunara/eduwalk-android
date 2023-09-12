@@ -14,6 +14,6 @@ data class Location(
     @SerialName("title") val title: String,
     @SerialName("description") val description: String?,
     @SerialName("imageBase64") val imageBase64: String?,
-    @SerialName("thresholdDistance") val thresholdDistance: Int,
+    @SerialName("thresholdDistance") val thresholdDistance: Int = 20,
     @SerialName("walkId") val walkId: String,
 ) : Parcelable

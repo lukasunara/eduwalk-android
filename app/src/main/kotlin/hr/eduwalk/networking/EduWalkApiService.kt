@@ -1,6 +1,7 @@
 package hr.eduwalk.networking
 
 import hr.eduwalk.data.model.Location
+import hr.eduwalk.data.model.Question
 import hr.eduwalk.data.model.User
 import hr.eduwalk.data.model.Walk
 import hr.eduwalk.data.model.WalkScore
@@ -8,6 +9,7 @@ import hr.eduwalk.networking.model.EmptyResponse
 import hr.eduwalk.networking.model.LocationQuestionsResponse
 import hr.eduwalk.networking.model.LocationResponse
 import hr.eduwalk.networking.model.LocationsWithScoresResponse
+import hr.eduwalk.networking.model.QuestionResponse
 import hr.eduwalk.networking.model.UpdateLocationScoreBody
 import hr.eduwalk.networking.model.UpdateWalkRequestBody
 import hr.eduwalk.networking.model.UserResponse
@@ -39,19 +41,19 @@ interface EduWalkApiService {
     @GET("/walk/getUserCreatedWalks")
     suspend fun getMyWalks(@Query("username") username: String): WalksResponse
 
-    @GET("join/getWalksWithScores")
+    @GET("/join/getWalksWithScores")
     suspend fun getWalksWithScores(@Query("username") username: String): WalksWithScoresResponse
 
-    @GET("join/getLocationsWithScores")
+    @GET("/join/getLocationsWithScores")
     suspend fun getLocationsWithScores(@Query("walkId") walkId: String, @Query("username") username: String): LocationsWithScoresResponse
 
-    @POST("walk/create")
+    @POST("/walk/create")
     suspend fun createWalk(@Body walk: Walk): EmptyResponse
 
-    @DELETE("walk/{walkId}")
+    @DELETE("/walk/{walkId}")
     suspend fun deleteWalk(@Path("walkId") walkId: String): EmptyResponse
 
-    @POST("walk/{walkId}/update")
+    @POST("/walk/{walkId}/update")
     suspend fun updateWalkInfo(@Path("walkId") walkId: String, @Body updateWalkRequestBody: UpdateWalkRequestBody): EmptyResponse
 
     /* --- WalkScore --- */
@@ -65,7 +67,13 @@ interface EduWalkApiService {
     @GET("/question/{locationId}")
     suspend fun getLocationQuestions(@Path("locationId") locationId: Long): LocationQuestionsResponse
 
-    @DELETE("question/{questionId}")
+    @POST("/question/create")
+    suspend fun createQuestion(@Body question: Question): QuestionResponse
+
+    @POST("/question/{questionId}/update")
+    suspend fun updateQuestion(@Path("questionId") questionId: Long, @Body question: Question): EmptyResponse
+
+    @DELETE("/question/{questionId}")
     suspend fun deleteQuestion(@Path("questionId") questionId: Long): EmptyResponse
 
     /* --- LocationScore --- */
@@ -73,15 +81,15 @@ interface EduWalkApiService {
     suspend fun updateLocationScore(@Body locationScoreBody: UpdateLocationScoreBody): EmptyResponse
 
     /* --- Location --- */
-    @GET("location/{walkId}")
+    @GET("/location/{walkId}")
     suspend fun getWalkLocations(@Path("walkId") walkId: String): WalkLocationsResponse
 
-    @POST("location/create")
+    @POST("/location/create")
     suspend fun createLocation(@Body location: Location): LocationResponse
 
-    @POST("location/{locationId}/update")
+    @POST("/location/{locationId}/update")
     suspend fun updateLocation(@Path("locationId") locationId: Long, @Body location: Location): EmptyResponse
 
-    @DELETE("location/{locationId}")
+    @DELETE("/location/{locationId}")
     suspend fun deleteLocation(@Path("locationId") locationId: Long): EmptyResponse
 }

@@ -56,12 +56,13 @@ class EditLocationInfoFragment : BaseFragment(contentLayoutId = R.layout.fragmen
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel.onDestroyView()
         binding = null
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        isCollecting = true
+        isCollecting = false
     }
 
     override fun setupListeners() {
@@ -70,7 +71,7 @@ class EditLocationInfoFragment : BaseFragment(contentLayoutId = R.layout.fragmen
             editLocationButton.setOnClickListener {
                 viewModel.onEditLocationClicked(
                     locationTitle = locationTitleEditText.text.toString(),
-                    locationDescription = locationDescriptionEditText.text.toString(),
+                    locationDescription = locationDescriptionEditText.text?.toString()?.takeIf { it.isNotBlank() },
                     imageBase64 = null,
                     thresholdDistance = thresholdDistance,
                 )
@@ -78,7 +79,7 @@ class EditLocationInfoFragment : BaseFragment(contentLayoutId = R.layout.fragmen
             addQuestionsButton.setOnClickListener {
                 viewModel.onAddQuestionClicked(
                     locationTitle = locationTitleEditText.text.toString(),
-                    locationDescription = locationDescriptionEditText.text.toString(),
+                    locationDescription = locationDescriptionEditText.text?.toString()?.takeIf { it.isNotBlank() },
                     imageBase64 = null,
                     thresholdDistance = thresholdDistance,
                 )
@@ -95,7 +96,7 @@ class EditLocationInfoFragment : BaseFragment(contentLayoutId = R.layout.fragmen
             })
             locationThresholdEditText.addTextChangedListener(object : DefaultTextWatcher {
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    thresholdDistance = s.toString().toIntOrNull() ?: 20
+                    thresholdDistance = s?.toString()?.toIntOrNull() ?: 20
 
                     val newText = getString(R.string.edit_location_threshold_text, thresholdDistance)
                     val startIndex = newText.indexOf(thresholdDistance.toString())
@@ -131,6 +132,7 @@ class EditLocationInfoFragment : BaseFragment(contentLayoutId = R.layout.fragmen
         if (isCollecting) return
         super.setupObservers()
         lifecycleScope.launch {
+            isCollecting = true
             viewModel.eventsFlow.collect { event ->
                 when (event) {
                     is EditLocationEvent.FinishDeleteLocation -> {

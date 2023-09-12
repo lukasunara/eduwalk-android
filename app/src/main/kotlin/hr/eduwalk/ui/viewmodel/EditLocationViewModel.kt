@@ -23,6 +23,10 @@ class EditLocationViewModel @Inject constructor(
         uiStateFlow.update { it.copy(location = location) }
     }
 
+    fun onDestroyView() {
+        uiStateFlow.value = EditLocationUiState()
+    }
+
     fun onEditLocationClicked(locationTitle: String, locationDescription: String?, imageBase64: String?, thresholdDistance: Int) {
         val oldLocation = uiStateFlow.value.location ?: return
 
@@ -58,7 +62,7 @@ class EditLocationViewModel @Inject constructor(
         }
     }
 
-    fun onAddQuestionClicked(locationTitle: String, locationDescription: String, imageBase64: Nothing?, thresholdDistance: Int) {
+    fun onAddQuestionClicked(locationTitle: String, locationDescription: String?, imageBase64: Nothing?, thresholdDistance: Int) {
         val location = uiStateFlow.value.location ?: return
 
         onEditLocationClicked(locationTitle, locationDescription, imageBase64, thresholdDistance)

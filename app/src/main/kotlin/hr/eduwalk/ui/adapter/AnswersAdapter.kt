@@ -21,7 +21,7 @@ private object StringDiffCallback : DiffUtil.ItemCallback<String>() {
 }
 
 class AnswersAdapter(
-    private val onAnswerSelected: (isCorrect: Boolean) -> Unit = {},
+    private val onAnswerSelected: ((isCorrect: Boolean) -> Unit)? = null,
 ) : ListAdapter<String, AnswersAdapter.AnswerViewHolder>(StringDiffCallback) {
 
     private val LETTERS_MAP = mapOf(0 to "a)", 1 to "b)", 2 to "c)", 3 to "d)", 4 to "e)")
@@ -51,6 +51,8 @@ class AnswersAdapter(
     inner class AnswerViewHolder(private val binding: ItemAnswerBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(answer: String, position: Int) = with(binding) {
+            if (onAnswerSelected == null) root.isClickable = false
+
             answerText.text = answer
             answerLetter.text = LETTERS_MAP[position]!!
 
@@ -76,8 +78,11 @@ class AnswersAdapter(
             root.setOnClickListener {
                 if (canShowCorrectAnswer) return@setOnClickListener
 
-                onAnswerSelected(isCorrect)
-                canShowCorrectAnswer = true
+                onAnswerSelected?.let {
+                    it(isCorrect)
+                    canShowCorrectAnswer = true
+                } ?: return@setOnClickListener
+
                 if (!isCorrect) {
                     updateUi(
                         textColorResId = R.color.red,
