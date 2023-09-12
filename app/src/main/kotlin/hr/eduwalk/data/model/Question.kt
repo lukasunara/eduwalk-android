@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 data class Question(
     @SerialName("id") val id: Long,
     @SerialName("questionText") val questionText: String,
-    @SerialName("answers") val answers: List<String>,
+    @SerialName("answers") var answers: List<String>,
     @SerialName("correctAnswer") val correctAnswer: String,
     @SerialName("locationId") val locationId: Long,
 ) : Parcelable

@@ -74,7 +74,9 @@ class QuizViewModel @Inject constructor(
             val questions = handleErrorResponse(
                 response = eduWalkRepository.getLocationQuestions(locationId = locationId),
             ) ?: return@launch
+
             val threeQuestions = if (questions.size <= 3) questions else questions.shuffled().subList(0, 3)
+            threeQuestions.forEach { it.answers = it.answers.shuffled() }
 
             this@QuizViewModel.questions = threeQuestions
             uiStateFlow.update { it.copy(question = threeQuestions.firstOrNull(), questionIndex = 0) }
