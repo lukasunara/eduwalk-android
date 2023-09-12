@@ -61,6 +61,7 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
 
     private val args: WalkFragmentArgs by navArgs()
 
+    private var isCollecting = false
     private var binding: FragmentWalkBinding? = null
     private var googleMap: GoogleMap? = null
     private var markers = mutableListOf<Marker>()
@@ -144,6 +145,7 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
     override fun onDestroy() {
         super.onDestroy()
         mapView.onDestroy()
+        isCollecting = false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -191,8 +193,10 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
     }
 
     override fun setupObservers() {
+        if (isCollecting) return
         super.setupObservers()
         lifecycleScope.launch {
+            isCollecting = true
             viewModel.eventsFlow.collect { event ->
                 when (event) {
                     is WalkEvent.ShowLeaderboard -> {

@@ -33,6 +33,7 @@ class EditWalkInfoFragment : BaseFragment(contentLayoutId = R.layout.fragment_ed
 
     private val args: EditWalkInfoFragmentArgs by navArgs()
 
+    private var isCollecting = false
     private var binding: FragmentEditWalkInfoBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -48,6 +49,11 @@ class EditWalkInfoFragment : BaseFragment(contentLayoutId = R.layout.fragment_ed
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        isCollecting = false
     }
 
     override fun setupListeners() {
@@ -69,8 +75,10 @@ class EditWalkInfoFragment : BaseFragment(contentLayoutId = R.layout.fragment_ed
     }
 
     override fun setupObservers() {
+        if (isCollecting) return
         super.setupObservers()
         lifecycleScope.launch {
+            isCollecting = true
             viewModel.eventsFlow.collect { event ->
                 when (event) {
                     is EditWalkEvent.FinishCreatingWalk -> {

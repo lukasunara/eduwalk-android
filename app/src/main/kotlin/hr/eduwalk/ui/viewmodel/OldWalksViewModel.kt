@@ -29,4 +29,8 @@ class OldWalksViewModel @Inject constructor(
             }
         }
     }
+
+    fun onDestroyView() {
+        uiStateFlow.value = OldWalksUiState()
+    }
 }

@@ -25,6 +25,7 @@ class HomeFragment : BaseFragment(contentLayoutId = R.layout.fragment_home) {
 
     override var onBackPressedListener: (() -> Unit)? = { mainActivity.finish() }
 
+    private var isCollecting = false
     private var binding: FragmentHomeBinding? = null
 
     private lateinit var user: User
@@ -42,6 +43,11 @@ class HomeFragment : BaseFragment(contentLayoutId = R.layout.fragment_home) {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        isCollecting = false
     }
 
     override fun setupListeners() {
@@ -64,8 +70,10 @@ class HomeFragment : BaseFragment(contentLayoutId = R.layout.fragment_home) {
     }
 
     override fun setupObservers() {
+        if (isCollecting) return
         super.setupObservers()
         lifecycleScope.launch {
+            isCollecting = true
             viewModel.eventsFlow.collect { event ->
                 when (event) {
                     is HomeEvent.UserLogout -> navController.navigate(directions = HomeFragmentDirections.navigateToLoginFragment())

@@ -25,6 +25,7 @@ class StartNewWalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_st
         WalksAdapter(onWalkClickListener = { walk -> viewModel.onDefaultWalkClicked(walkId = walk.id) })
     }
 
+    private var isCollecting = false
     private var binding: FragmentStartNewWalkBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -40,6 +41,11 @@ class StartNewWalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_st
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        isCollecting = false
     }
 
     override fun setupUi() {
@@ -62,8 +68,10 @@ class StartNewWalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_st
     }
 
     override fun setupObservers() {
+        if (isCollecting) return
         super.setupObservers()
         lifecycleScope.launch {
+            isCollecting = true
             viewModel.eventsFlow.collect { event ->
                 when (event) {
                     is StartNewWalkEvent.StartWalk -> {

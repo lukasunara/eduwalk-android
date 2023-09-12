@@ -25,4 +25,8 @@ class MyWalksViewModel @Inject constructor(
             uiStateFlow.update { it.copy(walks = myWalks) }
         }
     }
+
+    fun onDestroyView() {
+        uiStateFlow.value = MyWalksUiState()
+    }
 }

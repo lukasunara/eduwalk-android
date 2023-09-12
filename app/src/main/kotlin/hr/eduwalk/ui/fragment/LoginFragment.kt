@@ -22,6 +22,7 @@ class LoginFragment : BaseFragment(contentLayoutId = R.layout.fragment_login) {
 
     override var onBackPressedListener: (() -> Unit)? = { mainActivity.finish() }
 
+    private var isCollecting = false
     private var binding: FragmentLoginBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -32,6 +33,11 @@ class LoginFragment : BaseFragment(contentLayoutId = R.layout.fragment_login) {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        isCollecting = false
     }
 
     override fun setupListeners() {
@@ -49,8 +55,10 @@ class LoginFragment : BaseFragment(contentLayoutId = R.layout.fragment_login) {
     }
 
     override fun setupObservers() {
+        if (isCollecting) return
         super.setupObservers()
         lifecycleScope.launch {
+            isCollecting = true
             viewModel.eventsFlow.collect { event ->
                 when (event) {
                     is LoginEvent.FinishLogin -> navController.navigate(directions = LoginFragmentDirections.navigateToHomeFragment())

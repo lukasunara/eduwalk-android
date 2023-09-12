@@ -24,6 +24,7 @@ class MyWalksFragment : BaseFragment(contentLayoutId = R.layout.fragment_my_walk
         })
     }
 
+    private var isCollecting = false
     private var binding: FragmentMyWalksBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -38,7 +39,13 @@ class MyWalksFragment : BaseFragment(contentLayoutId = R.layout.fragment_my_walk
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel.onDestroyView()
         binding = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        isCollecting = false
     }
 
     override fun setupUi() {
@@ -53,8 +60,10 @@ class MyWalksFragment : BaseFragment(contentLayoutId = R.layout.fragment_my_walk
     }
 
     override fun setupObservers() {
+        if (isCollecting) return
         super.setupObservers()
         lifecycleScope.launch {
+            isCollecting = true
             viewModel.uiStateFlow.collect { uiState ->
                 uiState.walks.takeIf { it.isNotEmpty() }?.let { walksAdapter.submitList(it) }
             }
