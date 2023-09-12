@@ -68,8 +68,19 @@ class WalkViewModel @Inject constructor(
     private fun getWalkLocationsWithScores() {
         viewModelScope.launch {
             locationsWithScores = handleErrorResponse(
-                response = eduWalkRepository.getLocationsWithScores(walkId = walkId)
+                response = eduWalkRepository.getLocationsWithScores(walkId = walkId),
             )?.toMutableList() ?: return@launch
+
+            val allLocations = handleErrorResponse(
+                response = eduWalkRepository.getWalkLocations(walkId = walkId),
+            ) ?: return@launch
+
+            allLocations.forEach { location ->
+                val locationWithScore = locationsWithScores.firstOrNull { it.location == location }
+                if (locationWithScore == null) {
+                    locationsWithScores.add(LocationWithScore(location = location, score = null))
+                }
+            }
 
             uiStateFlow.update {
                 it.copy(locationsWithScores = locationsWithScores)
