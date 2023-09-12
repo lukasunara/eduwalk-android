@@ -46,7 +46,7 @@ class AnswersAdapter(
         notifyDataSetChanged()
     }
 
-    private fun showCorrectAnswer() = correctAnswerPosition?.let { notifyItemChanged(it) }
+    private fun showCorrectAnswer() = correctAnswerPosition?.let { notifyDataSetChanged() }
 
     inner class AnswerViewHolder(private val binding: ItemAnswerBinding) : RecyclerView.ViewHolder(binding.root) {
 
