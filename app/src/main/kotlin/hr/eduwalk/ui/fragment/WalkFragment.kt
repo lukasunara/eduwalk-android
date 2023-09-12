@@ -392,13 +392,15 @@ class WalkFragment : BaseFragment(contentLayoutId = R.layout.fragment_walk), OnM
                         val distance = markerLocation.distanceTo(lastLocation)
                         val locationWithScore = marker.tag as LocationWithScore
 
-                        val isInsideOfThreshold = distance <= locationWithScore.location.thresholdDistance
-                        if (isInsideOfThreshold) {
+                        val isInsideOfThresholdOrSolved =
+                            distance <= locationWithScore.location.thresholdDistance || locationWithScore.score != null
+
+                        if (isInsideOfThresholdOrSolved) {
                             enabledLocationIds.add(locationWithScore.location.id)
                         }
 
                         if (locationWithScore.score == null) {
-                            marker.setIcon(chooseDefaultMarkerIcon(isEnabled = isInsideOfThreshold))
+                            marker.setIcon(chooseDefaultMarkerIcon(isEnabled = isInsideOfThresholdOrSolved))
                         }
                     }
                 }
