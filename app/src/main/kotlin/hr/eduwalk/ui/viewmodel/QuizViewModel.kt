@@ -76,7 +76,7 @@ class QuizViewModel @Inject constructor(
             ) ?: return@launch
             val threeQuestions = if (questions.size <= 3) questions else questions.shuffled().subList(0, 3)
 
-            this@QuizViewModel.questions = questions
+            this@QuizViewModel.questions = threeQuestions
             uiStateFlow.update { it.copy(question = threeQuestions.firstOrNull(), questionIndex = 0) }
         }
     }

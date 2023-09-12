@@ -19,11 +19,14 @@ class EditLocationViewModel @Inject constructor(
     override val uiStateFlow = MutableStateFlow(value = EditLocationUiState())
     override val eventsFlow = MutableStateFlow<EditLocationEvent?>(value = null)
 
+    private var olderLocation: Location? = null
+
     fun start(location: Location) {
-        uiStateFlow.update { it.copy(location = location) }
+        uiStateFlow.update { it.copy(location = olderLocation ?: location) }
     }
 
     fun onDestroyView() {
+        olderLocation = uiStateFlow.value.location
         uiStateFlow.value = EditLocationUiState()
     }
 
