@@ -21,7 +21,10 @@ import retrofit2.Retrofit
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "http://192.168.23.151:8080/"
+    // ured - 192.168.0.100
+    // stan zg - 192.168.0.100
+    // mobilni - 192.168.23.151
+    private const val BASE_URL = "http://192.168.0.100:8080/"
 
     private const val CACHE_DIRECTORY_OKHTTP = "okhttp_cache"
     private const val MAX_CACHE_SIZE = 20 * 1024L * 1024L
